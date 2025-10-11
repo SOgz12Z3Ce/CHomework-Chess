@@ -1,7 +1,7 @@
 /**
  * @file board.h
  * @brief provide board struct
- * @author Wu HaoYu
+ * @author SOgz12Z3Ce
  * @date 2025-10-11
  * @version 1.0
  */
