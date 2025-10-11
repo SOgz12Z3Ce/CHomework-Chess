@@ -1,4 +1,4 @@
-.vscode
-build
-debug
-release
+/.vscode
+/build
+/debug
+/release
