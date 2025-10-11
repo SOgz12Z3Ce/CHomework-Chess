@@ -8,13 +8,13 @@
 
 /**
  * @brief check if piece id is valid
- * @return 1 if valid; 0 if invalid
+ * @return true if valid; false if invalid
  */
 static bool check_id_valid(const char *id);
 
 /**
  * @brief check if piece id represents a king
- * @return 1 if represents king; 0 if doesn't represent king
+ * @return true if represents king; false if doesn't represent king
  */
 static bool is_king(const char *id);
 
