@@ -14,13 +14,14 @@ typedef struct Piece Piece;
 
 /** 
  * @brief create `Piece`
- * @param id the unique identifier of `Piece`
+ * @param id [in] the unique identifier of `Piece` to create
+ * @return [own] ptr of created `Piece`
  */
 Piece *piece_create(const char *id);
 
 /**
  * @brief free `Piece`
- * @param p the `Piece`
+ * @param p [own] ptr of `Piece` to free
  */
 void piece_free(Piece *p);
 
