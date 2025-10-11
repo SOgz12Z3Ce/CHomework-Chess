@@ -3,7 +3,9 @@
 
 int main(void)
 {
-	printf("Hello, world!\n");
+	printf(
+		"This is a example commit. Please checkout a new branch. "
+		"DO NOT COMMIT TO THE MAIN BRANCH.\n"
+	);
 	return 0;
 }
-
