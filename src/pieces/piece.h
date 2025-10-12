@@ -93,4 +93,9 @@ struct piece_interface_t {
 	side_t (*get_side)(piece_ptr_t p);
 };
 
+inline bool is_same_side(piece_ptr_t p1, piece_ptr_t p2)
+{
+	return p1.i->get_side(p1) == p2.i->get_side(p2);
+}
+
 #endif /* PIECE_INTERFACE_H_ */
