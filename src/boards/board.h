@@ -40,7 +40,7 @@ struct board_interface_t {
 	 * @return [own] a two dimensional array which repersents current
 	 *               board state
 	 */
-	piece_ptr_t ***(*get_state)(board_ptr_t b);
+	piece_ptr_t **(*get_state)(board_ptr_t b);
 
 	/**
 	 * @brief get board row size (height)
