@@ -16,10 +16,10 @@
 #include "king.h"
 #include "position.h"
 
-/** @brief macros for piece_interface_t.get_side() */
 typedef int side_t;
-#define SIDE_WHITE 0
-#define SIDE_BLACK 1
+#define SIDE_WHITE 0b01
+#define SIDE_BLACK 0b10
+#define SIDE_WHITE_AND_BLACK 0b11
 
 typedef struct piece_interface_t piece_interface_t;
 
@@ -36,6 +36,13 @@ typedef union __attribute__ ((__transparent_union__)) {
 
 /** @brief interface of pieces */
 struct piece_interface_t {
+	/**
+	 * @brief deep copy `piece_ptr_t`
+	 * @param p [in] `piece_ptr_t` to copy
+	 * @return [own] copy of `piece_ptr_t`
+	 */
+	piece_ptr_t (*copy)(piece_ptr_t p);
+
 	/**
 	 * @brief free `piece_ptr_t`
 	 * @param p [own] `piece_ptr_t` to free
@@ -72,7 +79,7 @@ struct piece_interface_t {
 	 * @param pos the `pos_t`
 	 */
 	bool (*can_reach)(piece_ptr_t p, board_ptr_t b, pos_t pos);
-	
+
 	/**
 	 * @brief get reachable positions array
 	 * @param p [in] `piece_ptr_t`
@@ -82,13 +89,13 @@ struct piece_interface_t {
 	 * @return [own] reachable `pos_t` array
 	 */
 	pos_t *(*get_reachable)(piece_ptr_t p, board_ptr_t b, size_t *size);
-	
+
 	/**
 	 * @brief get `piece_ptr_t` side
 	 * @param p [in] `piece_ptr_t`
 	 * @return side of `piece_ptr_t`:
-	 *         - SIDE_WHITE: white side
-	 *         - SIDE_BLACK: black side
+	 *         - `SIDE_WHITE`: white side
+	 *         - `SIDE_BLACK`: black side
 	 */
 	side_t (*get_side)(piece_ptr_t p);
 };
