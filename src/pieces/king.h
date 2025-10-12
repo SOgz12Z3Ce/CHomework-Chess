@@ -16,7 +16,7 @@ typedef struct king_t king_t;
 /**
  * @brief create a king piece
  * @param side the side of king
- * @return 
+ * @return `piece_ptr_t` of king
  */
 piece_ptr_t king_create(side_t side);
 

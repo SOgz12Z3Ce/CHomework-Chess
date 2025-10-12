@@ -104,6 +104,13 @@ struct board_interface_t {
 	 *                                  checked
 	 */
 	side_t (*get_checking)(board_ptr_t b);
+
+	/**
+	 * @brief get number of squares on the board
+	 * @param b[in] `board_ptr_t` to count
+	 * @return number of squares
+	 */
+	size_t (*get_square_num)(board_ptr_t b);
 };
 
 #endif /* BOARD_INTERFACE_H_ */
