@@ -11,6 +11,7 @@
 
 #include "piece.h"
 #include "board.h"
+#include "mallocer.h"
 
 void piece_free(piece_ptr_t p)
 {
@@ -57,7 +58,7 @@ pos_t *piece_all(piece_ptr_t p, board_ptr_t b, size_t *size,
 	size_t row_size = b.i->get_row_size(b);
 	size_t col_size = b.i->get_col_size(b);
 
-	pos_t *ret = (pos_t *)malloc(sizeof(pos_t) * b.i->get_square_num(b));
+	pos_t *ret = new_array(pos_t, b.i->get_square_num(b));
 	size_t ret_size = 0;
 	for (size_t i = 0; i < row_size; i++) {
 		for (size_t j = 0; j < col_size; j++) {

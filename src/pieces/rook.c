@@ -13,6 +13,7 @@
 #include "piece.h"
 #include "board.h"
 #include "position.h"
+#include "mallocer.h"
 
 static piece_ptr_t copy(piece_ptr_t p);
 static bool is_king(piece_ptr_t p);
@@ -41,7 +42,7 @@ static const piece_interface_t vtable = (piece_interface_t) {
 
 piece_ptr_t rook_create(side_t side)
 {
-	rook_t *ret = (rook_t *)malloc(sizeof(rook_t));
+	rook_t *ret = new(rook_t);
 	if (!ret) {
 		printf("fatal error at rook_create: Not enough memory.\n");
 		exit(1);
@@ -93,6 +94,7 @@ static bool can_reach(piece_ptr_t p, board_ptr_t b, pos_t pos)
 			}
 		}
 	}
+	free(state);
 	return true;
 }
 

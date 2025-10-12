@@ -13,6 +13,7 @@
 #include "piece.h"
 #include "board.h"
 #include "position.h"
+#include "mallocer.h"
 
 #define abs(x) ((x) > 0 ? (x) : (-(x)))
 
@@ -43,7 +44,7 @@ static const piece_interface_t vtable = (piece_interface_t) {
 
 piece_ptr_t king_create(side_t side)
 {
-	king_t *ret = (king_t *)malloc(sizeof(king_t));
+	king_t *ret = new(king_t);
 	if (!ret) {
 		printf("fatal error at king_create: Not enough memory.\n");
 		exit(1);
