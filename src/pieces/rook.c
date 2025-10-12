@@ -14,8 +14,6 @@
 #include "board.h"
 #include "position.h"
 
-#define MAX_REACHABLE_POS_SIZE 256
-
 static piece_ptr_t copy(piece_ptr_t p);
 static void free(piece_ptr_t p);
 static bool is_king(piece_ptr_t p);

@@ -14,8 +14,6 @@
 #include "board.h"
 #include "position.h"
 
-#define MAX_POS_SIZE 256
-
 #define abs(x) ((x) > 0 ? (x) : (-(x)))
 
 static piece_ptr_t copy(piece_ptr_t p);
