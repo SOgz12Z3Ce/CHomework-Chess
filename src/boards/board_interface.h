@@ -57,36 +57,35 @@ struct board_interface_t {
 	size_t (*get_col_size)(board_ptr_t b);
 
 	/**
+	 * @brief find the position of a piece
+	 * @param b [in] `board_ptr_t`
+	 * @param p [in] `piece_ptr_t` to find
+	 * @param pos [out] output ptr of `pos_t`
+	 */
+	void (*find)(board_ptr_t b, piece_ptr_t p, pos_t *pos);
+
+	/**
 	 * @brief put `piece_ptr_t` on given position of `board_ptr_t`
 	 * @param b [in,out] `board_ptr_t`
-	 * @param row row of position
-	 * @param col column of position
 	 * @param p [own] `piece_ptr_t` to put
+	 * @param pos the position
 	 */
-	void (*put)(board_ptr_t b,
-	            size_t row, size_t col,
-	            piece_ptr_t p);
+	void (*put)(board_ptr_t b, piece_ptr_t p, pos_t pos);
 
 	/**
 	 * @brief remove piece on given position of `board_ptr_t`
 	 * @param b [in,out] `board_ptr_t`
-	 * @param row row of position
-	 * @param col column of position
+	 * @param pos the position
 	 */
-	void (*remove)(board_ptr_t *b,
-	               size_t row, size_t col);
+	void (*remove)(board_ptr_t *b, pos_t pos);
 
 	/**
 	 * @brief move a piece on `board_ptr_t`
 	 * @param b [in,out] `board_ptr_t` to add on
-	 * @param s_row row of start position
-	 * @param s_col column of start position
-	 * @param e_row row of end position
-	 * @param e_col column of end position
+	 * @param cur_pos current position
+	 * @param dest_pos dest position
 	 */
-	void (*move)(board_ptr_t *b,
-	             size_t s_row, size_t s_col,
-	             size_t e_row, size_t e_col);
+	void (*move)(board_ptr_t *b, pos_t cur_pos, pos_t dest_pos);
 };
 
 #endif /* BOARD_INTERFACE_H_ */
