@@ -19,10 +19,7 @@
 static piece_ptr_t copy(piece_ptr_t p);
 static void free(piece_ptr_t p);
 static bool is_king(piece_ptr_t p);
-static bool can_move_to(piece_ptr_t p, board_ptr_t b, pos_t pos);
 static bool can_reach(piece_ptr_t p, board_ptr_t b, pos_t pos);
-static pos_t *all(piece_ptr_t p, board_ptr_t b, size_t *size,
-                  all_callback_t callback);
 static side_t get_side(piece_ptr_t p);
 static void on_move(piece_ptr_t p, board_ptr_t b);
 
