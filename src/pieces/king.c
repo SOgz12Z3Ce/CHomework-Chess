@@ -17,7 +17,6 @@
 #define abs(x) ((x) > 0 ? (x) : (-(x)))
 
 static piece_ptr_t copy(piece_ptr_t p);
-static void free(piece_ptr_t p);
 static bool is_king(piece_ptr_t p);
 static bool can_reach(piece_ptr_t p, board_ptr_t b, pos_t pos);
 static side_t get_side(piece_ptr_t p);
@@ -34,7 +33,7 @@ struct king_t {
 
 static const piece_interface_t vtable = (piece_interface_t) {
 	.copy = copy,
-	.free = free,
+	.free = piece_free,
 	.is_king = is_king,
 	.can_move_to = piece_can_move_to,
 	.can_reach = can_reach,
@@ -68,13 +67,6 @@ static piece_ptr_t copy(piece_ptr_t p)
 	return (piece_ptr_t) {
 		.king = ret
 	};
-}
-
-static void free(piece_ptr_t p)
-{
-	king_t *this = p.king;
-
-	free(this);
 }
 
 static bool is_king(piece_ptr_t p)

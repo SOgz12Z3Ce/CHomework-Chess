@@ -104,6 +104,7 @@ struct piece_interface_t {
 
 /* base methods */
 
+void piece_free(piece_ptr_t p);
 bool piece_is_king(piece_ptr_t p);
 bool piece_can_move_to(piece_ptr_t p, board_ptr_t b, pos_t pos);
 pos_t *piece_all(piece_ptr_t p, board_ptr_t b, size_t *size,

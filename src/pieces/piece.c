@@ -12,6 +12,11 @@
 #include "piece.h"
 #include "board.h"
 
+void piece_free(piece_ptr_t p)
+{
+	free(p.i);
+}
+
 bool piece_is_king(piece_ptr_t p)
 {
 	return false;
