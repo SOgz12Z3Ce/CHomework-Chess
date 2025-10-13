@@ -17,6 +17,7 @@ typedef struct board_interface_t board_interface_t;
 
 /** @brief abstract for boards */
 typedef union __attribute__ ((__transparent_union__)) {
+	void *ptr;
 	board_interface_t *i;
 } board_ptr_t;
 
