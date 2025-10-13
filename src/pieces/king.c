@@ -27,7 +27,7 @@ static void on_move(piece_ptr_t p, board_ptr_t b);
 
 /** @brief the king piece */
 struct king_t {
-	piece_interface_t *i;
+	piece_interface_t i;
 	side_t side; /**< @brief `SIDE_WHITE` or `SIDE_BLACK` */
 	bool moved; /**< @brief is this king moved */
 };
@@ -50,7 +50,7 @@ piece_ptr_t king_create(side_t side)
 		exit(1);
 	}
 	*ret = (king_t) {
-		.i = &vtable,
+		.i = vtable,
 		.side = side,
 		.moved = false
 	};

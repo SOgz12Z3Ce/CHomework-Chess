@@ -29,6 +29,7 @@ typedef struct piece_interface_t piece_interface_t;
 /** @brief abstract for pieces */
 typedef union __attribute__ ((__transparent_union__)) {
 	piece_interface_t *i;
+	void *v;
 	king_t *king;
 	// queen_t *queen;
 	rook_t *rook;
