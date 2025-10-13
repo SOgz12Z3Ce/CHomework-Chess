@@ -80,7 +80,7 @@ static bool can_reach(piece_ptr_t p, board_ptr_t b, pos_t pos)
 	if (cur_pos.row == pos.row) {
 		int next = pos.col - cur_pos.col > 0 ? 1 : -1;
 		for (int i = cur_pos.col + next; i != pos.col; i += next) {
-			if (state[pos.row][i].i != NULL) {
+			if (state[pos.row][i].ptr != NULL) {
 				free(state);
 				return false;
 			}
@@ -88,7 +88,7 @@ static bool can_reach(piece_ptr_t p, board_ptr_t b, pos_t pos)
 	} else {
 		int next = pos.row - cur_pos.row > 0 ? 1 : -1;
 		for (int i = cur_pos.row + next; i != pos.row; i += next) {
-			if (state[i][pos.col].i != NULL) {
+			if (state[i][pos.col].ptr != NULL) {
 				free(state);
 				return false;
 			}

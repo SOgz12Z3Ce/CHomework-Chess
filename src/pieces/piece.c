@@ -15,7 +15,7 @@
 
 void piece_free(piece_ptr_t p)
 {
-	free(p.i);
+	free(p.ptr);
 }
 
 bool piece_is_king(piece_ptr_t p)
