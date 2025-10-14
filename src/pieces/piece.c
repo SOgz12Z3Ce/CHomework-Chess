@@ -65,10 +65,7 @@ pos_t *piece_all(piece_ptr_t p, board_ptr_t b, size_t *size,
 	size_t ret_size = 0;
 	for (size_t i = 0; i < row_size; i++) {
 		for (size_t j = 0; j < col_size; j++) {
-			pos_t pos = (pos_t) {
-				.row = i,
-				.col = j
-			};
+			pos_t pos = pos_create(i, j);
 			if (callback(p, b, pos))
 				ret[ret_size++] = pos;
 		}
