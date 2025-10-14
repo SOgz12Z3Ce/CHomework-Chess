@@ -62,23 +62,23 @@ struct piece_interface_t {
 	/**
 	 * @brief check if the `piece_ptr_t` can move to the given `pos_t`
 	 * @param p [in] `piece_ptr_t` to check
-	 * @param b [in] `board_ptr_t` to check
-	 * @param pos the `pos_t`
+	 * @param b [in] `board_ptr_t` to check (must contain `p`)
+	 * @param pos the `pos_t` (must be at `b`)
 	 */
 	bool (*can_move_to)(piece_ptr_t p, board_ptr_t b, pos_t pos);
 
 	/**
 	 * @brief check if the `piece_ptr_t` can reach the given `pos_t`
 	 * @param p [in] `piece_ptr_t` to check
-	 * @param b [in] `board_ptr_t` to check
-	 * @param pos the `pos_t`
+	 * @param b [in] `board_ptr_t` to check (must contain `p`)
+	 * @param pos the `pos_t` (must be at `b`)
 	 */
 	bool (*can_reach)(piece_ptr_t p, board_ptr_t b, pos_t pos);
 
 	/**
 	 * @brief get all positions that make callback return true as array
 	 * @param p [in] `piece_ptr_t`
-	 * @param b [in] `board_ptr_t`
+	 * @param b [in] `board_ptr_t` (must contain `p`)
 	 * @param size [out] returned array size
 	 * @param callback callback func
 	 * @return [own] reachable `pos_t` array
@@ -98,7 +98,7 @@ struct piece_interface_t {
 	/**
 	 * @brief take actions when `piece_ptr_t` is moved
 	 * @param p [in,out] `piece_ptr_t` to take action
-	 * @param b [in,out] `board_ptr_t`
+	 * @param b [in,out] `board_ptr_t` (must contain `p`)
 	 */
 	void (*on_move)(piece_ptr_t p, board_ptr_t b);
 };

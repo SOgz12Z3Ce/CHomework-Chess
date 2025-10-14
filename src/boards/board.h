@@ -12,6 +12,7 @@
 #include <stddef.h>
 
 #include "piece.h"
+#include "stdboard.h"
 
 typedef struct board_interface_t board_interface_t;
 
@@ -19,6 +20,7 @@ typedef struct board_interface_t board_interface_t;
 typedef union __attribute__ ((__transparent_union__)) {
 	void *ptr;
 	board_interface_t *i;
+	stdboard_t *stdboard;
 } board_ptr_t;
 
 /** @brief interface of boards */
@@ -45,8 +47,8 @@ struct board_interface_t {
 	/**
 	 * @brief get board state
 	 * @param b [in] `board_ptr_t`
-	 * @return [own] a two dimensional array which repersents current
-	 *               board state
+	 * @return [own] a two dimensional `this.row_size` * `this.col_size`
+	 *               array which repersents current board state
 	 */
 	piece_ptr_t **(*get_state)(board_ptr_t b);
 
@@ -67,7 +69,7 @@ struct board_interface_t {
 	/**
 	 * @brief find the `pos_t` of a `piece_ptr_t`
 	 * @param b [in] `board_ptr_t`
-	 * @param p [in] `piece_ptr_t` to find
+	 * @param p [in] `piece_ptr_t` to find (must exist)
 	 * @return `pos_t` of `piece_ptr_t`
 	 */
 	pos_t (*find)(board_ptr_t b, piece_ptr_t p);
@@ -76,22 +78,23 @@ struct board_interface_t {
 	 * @brief put `piece_ptr_t` on given position of `board_ptr_t`
 	 * @param b [in,out] `board_ptr_t`
 	 * @param p [own] `piece_ptr_t` to put
-	 * @param pos the position
+	 * @param pos the position (must be a blank)
 	 */
 	void (*put)(board_ptr_t b, piece_ptr_t p, pos_t pos);
 
 	/**
 	 * @brief remove piece on given position of `board_ptr_t`
 	 * @param b [in,out] `board_ptr_t`
-	 * @param pos the position
+	 * @param pos the position (must be a piece)
 	 */
 	void (*remove)(board_ptr_t b, pos_t pos);
 
 	/**
 	 * @brief move a piece on `board_ptr_t`
 	 * @param b [in,out] `board_ptr_t` to add on
-	 * @param cur_pos current position
+	 * @param cur_pos current position (must be a piece)
 	 * @param dest_pos dest position
+	 * @note the move must be valid
 	 */
 	void (*move)(board_ptr_t b, pos_t cur_pos, pos_t dest_pos);
 
