@@ -16,4 +16,12 @@ typedef struct pos {
 	size_t col;
 } pos_t;
 
+inline pos_t pos_create(size_t row, size_t col)
+{
+	return (pos_t) {
+		.row = row,
+		.col = col
+	};
+}
+
 #endif /* POSITION_H_ */
