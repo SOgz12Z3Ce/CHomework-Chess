@@ -39,6 +39,9 @@ bool piece_can_move_to(piece_ptr_t p, board_ptr_t b, pos_t pos)
 		/** create and check the post-move board */
 		board_ptr_t tmp = b.i->copy(b);
 		tmp.i->remove(tmp, cur_pos);
+		piece_ptr_t target = state[pos.row][pos.col];
+		if (target.ptr)
+			target.i->free(target);
 		tmp.i->put(tmp, p.i->copy(p), pos);
 
 		if (tmp.i->get_checking(tmp) & p.i->get_side(p))
