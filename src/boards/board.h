@@ -11,17 +11,17 @@
 
 #include <stddef.h>
 
+#include "piece_base.h"
 #include "piece.h"
 #include "stdboard.h"
-
-typedef struct board_interface_t board_interface_t;
+#include "move.h"
 
 /** @brief abstract for boards */
-typedef union __attribute__ ((__transparent_union__)) {
+union __attribute__ ((__transparent_union__)) board_ptr_t {
 	void *ptr;
 	board_interface_t *i;
 	stdboard_t *stdboard;
-} board_ptr_t;
+};
 
 /** @brief interface of boards */
 struct board_interface_t {
@@ -51,6 +51,13 @@ struct board_interface_t {
 	 *               array which repersents current board state
 	 */
 	piece_ptr_t **(*get_state)(board_ptr_t b);
+
+	/**
+	 * @brief get last move
+	 * @param b [in] the board
+	 * @return last move
+	 */
+	move_t (*get_last_move)(board_ptr_t b);
 
 	/**
 	 * @brief get board row size (height)
@@ -90,13 +97,27 @@ struct board_interface_t {
 	void (*remove)(board_ptr_t b, pos_t pos);
 
 	/**
+	 * @brief get the piece ptr at position
+	 * @param b [in] board
+	 * @param pos the position
+	 * @return [borrow] the piece
+	 */
+	piece_ptr_t (*at)(board_ptr_t b, pos_t pos);
+
+	/**
+	 * @brief clean and get the `piece_ptr_t` at `pos`
+	 * @param b [in,out] `board_ptr_t`
+	 * @param pos the position (must be a piece)
+	 * @return [own] the `piece_ptr_t`
+	 */
+	piece_ptr_t (*pickup)(board_ptr_t b, pos_t pos);
+
+	/**
 	 * @brief move a piece on `board_ptr_t`
 	 * @param b [in,out] `board_ptr_t` to add on
-	 * @param cur_pos current position (must be a piece)
-	 * @param dest_pos dest position
-	 * @note the move must be valid
+	 * @param m the move
 	 */
-	void (*move)(board_ptr_t b, pos_t cur_pos, pos_t dest_pos);
+	void (*move)(board_ptr_t b, move_t m);
 
 	/**
 	 * @brief check if the board is checking

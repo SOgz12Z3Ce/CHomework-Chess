@@ -18,41 +18,45 @@ void piece_free(piece_ptr_t p)
 	free(p.ptr);
 }
 
-bool piece_is_king(piece_ptr_t p)
+bool piece_can_attack(piece_ptr_t p, board_ptr_t b, pos_t pos)
 {
-	return false;
+	if (!p.i->can_control(p, b, pos))
+		return false;
+
+	piece_ptr_t target = b.i->at(b, pos);
+	if (!target.ptr)
+		return false;
+	if (is_same_side(p, target))
+		return false;
+	return true;
 }
 
-bool piece_can_move_to(piece_ptr_t p, board_ptr_t b, pos_t pos)
+bool piece_can_move(piece_ptr_t p, board_ptr_t b, pos_t pos)
 {
-	piece_ptr_t **state = b.i->get_state(b);
 	pos_t cur_pos = b.i->find(b, p);
 
-	bool ret;
-	if (!can_reach(p, b, pos)) {
-		ret = false;
-	}
-	else if (is_same_side(p, state[pos.row][pos.col])) {
-		ret = false;
-	}
-	else {
-		/** create and check the post-move board */
-		board_ptr_t tmp = b.i->copy(b);
-		tmp.i->remove(tmp, cur_pos);
-		piece_ptr_t target = state[pos.row][pos.col];
-		if (target.ptr)
-			target.i->free(target);
-		tmp.i->put(tmp, p.i->copy(p), pos);
+	int break_;
 
-		if (tmp.i->get_checking(tmp) & p.i->get_side(p))
-			ret = false;
-		else
-			ret = true;
+	/* check reachable */
+	if (!p.i->can_walk(p, b, pos) && !p.i->can_attack(p, b, pos))
+		return false;
+
+	/* check attack same side piece */
+	piece_ptr_t target = b.i->at(b, pos);
+	if (target.ptr && is_same_side(p, target))
+		return false;
+
+	/* check is board valid */
+	board_ptr_t tmp = b.i->copy(b);
+	tmp.i->move(tmp, move_create(cur_pos, pos));
+	if (tmp.i->get_checking(tmp) & p.i->get_side(p)) {
+		/* cause checked */
 		tmp.i->free(tmp);
+		return false;
 	}
-	
-	free(state);
-	return ret;
+
+	tmp.i->free(tmp);
+	return true;
 }
 
 pos_t *piece_all(piece_ptr_t p, board_ptr_t b, size_t *size,
@@ -78,4 +82,27 @@ pos_t *piece_all(piece_ptr_t p, board_ptr_t b, size_t *size,
 void piece_on_move(piece_ptr_t p, board_ptr_t b)
 {
 	// do nothing
+}
+
+bool is_same_side(piece_ptr_t p1, piece_ptr_t p2)
+{
+	return p1.i->get_side(p1) == p2.i->get_side(p2);
+}
+
+size_t get_moveable_num(piece_ptr_t p, board_ptr_t b,
+                        int next_col, int next_row)
+{
+	size_t col_size = b.i->get_col_size(b);
+	size_t row_size = b.i->get_row_size(b);
+
+	size_t ret = 0;
+	pos_t pos = b.i->find(b, p);
+	do {
+		pos.col += next_col;
+		pos.row += next_row;
+		ret++;
+	} while ((pos.col < col_size && pos.row < row_size)
+	         && !b.i->at(b, pos).ptr);
+	
+	return ret - 1;
 }

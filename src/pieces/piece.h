@@ -12,22 +12,14 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+#include "piece_base.h"
 #include "board.h"
+#include "position.h"
 #include "king.h"
 #include "rook.h"
-#include "position.h"
-
-/** @brief represents white and black side */
-typedef int side_t;
-#define SIDE_WHITE 0b01
-#define SIDE_BLACK 0b10
-#define SIDE_WHITE_AND_BLACK 0b11
-
-typedef bool (*all_callback_t)(piece_ptr_t, board_ptr_t, pos_t);
-typedef struct piece_interface_t piece_interface_t;
 
 /** @brief abstract for pieces */
-typedef union __attribute__ ((__transparent_union__)) {
+union __attribute__ ((__transparent_union__)) piece_ptr_t {
 	void *ptr;
 	piece_interface_t *i;
 	king_t *king;
@@ -36,7 +28,7 @@ typedef union __attribute__ ((__transparent_union__)) {
 	// bishop_t *bishop;
 	// knight_t *knight;
 	// pawn_t *pawn;
-} piece_ptr_t;
+};
 
 /** @brief interface of pieces */
 struct piece_interface_t {
@@ -54,10 +46,43 @@ struct piece_interface_t {
 	void (*free)(piece_ptr_t p);
 
 	/**
-	 * @brief check if the `piece_ptr_t` is counted as king
+	 * @brief check if the `piece_ptr_t` moved
 	 * @param p [in] `piece_ptr_t` to check
 	 */
-	bool (*is_king)(piece_ptr_t p);
+	bool (*is_moved)(piece_ptr_t p);
+
+	/**
+	 * @brief check the type of piece
+	 * @param p [in] piece to check
+	 * @param type [in] type
+	 * @return check if the `p` is `type`
+	 */
+	bool (*is)(piece_ptr_t p, const char *const type);
+
+	/**
+	 * @brief check if the `piece_ptr_t` can walk(no capture) to the given
+	 *        `pos_t`
+	 * @param p [in] `piece_ptr_t` to check
+	 * @param b [in] `board_ptr_t` to check (must contain `p`)
+	 * @param pos the `pos_t` (must be at `b` and blank)
+	 */
+	bool (*can_walk)(piece_ptr_t p, board_ptr_t b, pos_t pos);
+
+	/**
+	 * @brief check if the `piece_ptr_t` can control the given `pos_t`
+	 * @param p [in] `piece_ptr_t` to check
+	 * @param b [in] `board_ptr_t` to check (must contain `p`)
+	 * @param pos the `pos_t` (must be at `b`)
+	 */
+	bool (*can_control)(piece_ptr_t p, board_ptr_t b, pos_t pos);
+
+	/**
+	 * @brief check if the `piece_ptr_t` can capture the given `pos_t`
+	 * @param p [in] `piece_ptr_t` to check
+	 * @param b [in] `board_ptr_t` to check (must contain `p`)
+	 * @param pos the `pos_t` (must be at `b` and a enemy piece)
+	 */
+	bool (*can_attack)(piece_ptr_t p, board_ptr_t b, pos_t pos);
 
 	/**
 	 * @brief check if the `piece_ptr_t` can move to the given `pos_t`
@@ -65,15 +90,7 @@ struct piece_interface_t {
 	 * @param b [in] `board_ptr_t` to check (must contain `p`)
 	 * @param pos the `pos_t` (must be at `b`)
 	 */
-	bool (*can_move_to)(piece_ptr_t p, board_ptr_t b, pos_t pos);
-
-	/**
-	 * @brief check if the `piece_ptr_t` can reach the given `pos_t`
-	 * @param p [in] `piece_ptr_t` to check
-	 * @param b [in] `board_ptr_t` to check (must contain `p`)
-	 * @param pos the `pos_t` (must be at `b`)
-	 */
-	bool (*can_reach)(piece_ptr_t p, board_ptr_t b, pos_t pos);
+	bool (*can_move)(piece_ptr_t p, board_ptr_t b, pos_t pos);
 
 	/**
 	 * @brief get all positions that make callback return true as array
@@ -106,15 +123,16 @@ struct piece_interface_t {
 /* base methods */
 
 void piece_free(piece_ptr_t p);
-bool piece_is_king(piece_ptr_t p);
-bool piece_can_move_to(piece_ptr_t p, board_ptr_t b, pos_t pos);
+bool piece_can_attack(piece_ptr_t p, board_ptr_t b, pos_t pos);
+bool piece_can_move(piece_ptr_t p, board_ptr_t b, pos_t pos);
 pos_t *piece_all(piece_ptr_t p, board_ptr_t b, size_t *size,
                  all_callback_t callback);
 void piece_on_move(piece_ptr_t p, board_ptr_t b);
 
-inline bool is_same_side(piece_ptr_t p1, piece_ptr_t p2)
-{
-	return p1.i->get_side(p1) == p2.i->get_side(p2);
-}
+/* other methods */
+
+bool is_same_side(piece_ptr_t p1, piece_ptr_t p2);
+size_t get_moveable_num(piece_ptr_t p, board_ptr_t b,
+                        int next_col, int next_row);
 
 #endif /* PIECE_INTERFACE_H_ */

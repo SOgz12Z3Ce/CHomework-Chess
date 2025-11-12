@@ -9,9 +9,9 @@
 #ifndef ROOK_H_
 #define ROOK_H_
 
-#include "piece.h"
-
 typedef struct rook_t rook_t;
+
+#include "piece.h"
 
 /**
  * @brief create a rook piece

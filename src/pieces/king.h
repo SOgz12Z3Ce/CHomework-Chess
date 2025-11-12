@@ -9,9 +9,9 @@
 #ifndef KING_H_
 #define KING_H_
 
-#include "piece.h"
-
 typedef struct king_t king_t;
+
+#include "piece.h"
 
 /**
  * @brief create a king piece

@@ -1,9 +1,7 @@
 ## project settings
 cmake_minimum_required(VERSION 4.1.2)
-set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS ON)
 project(chess C)
 
 ## global settings
@@ -13,12 +11,22 @@ set(SDL3_ROOT "${CMAKE_SOURCE_DIR}/third_party/SDL3-3.2.24")
 ## output settings
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${OUTPUT_DIR})
 
-## third-party include
-# SDL3
-include_directories("${SDL3_ROOT}/include")
-
 ## targets
-add_executable(chess "${CMAKE_SOURCE_DIR}/src/main.c")
+add_executable(chess)
+
+target_sources(chess PRIVATE
+	"${CMAKE_SOURCE_DIR}/src/main.c"
+	"${CMAKE_SOURCE_DIR}/src/state.c"
+	"${CMAKE_SOURCE_DIR}/src/boards/stdboard.c"
+	"${CMAKE_SOURCE_DIR}/src/pieces/piece.c"
+	"${CMAKE_SOURCE_DIR}/src/pieces/king.c"
+	"${CMAKE_SOURCE_DIR}/src/pieces/rook.c"
+)
+target_include_directories(chess PRIVATE
+	"${CMAKE_SOURCE_DIR}/src/boards"
+	"${CMAKE_SOURCE_DIR}/src/pieces"
+	"${CMAKE_SOURCE_DIR}/src"
+)
 
 ## link
 target_link_libraries(chess PRIVATE "${SDL3_ROOT}/lib/libSDL3.dll.a")

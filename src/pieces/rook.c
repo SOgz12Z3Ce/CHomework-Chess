@@ -8,6 +8,8 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "rook.h"
 #include "piece.h"
@@ -16,12 +18,12 @@
 #include "mallocer.h"
 
 static piece_ptr_t copy(piece_ptr_t p);
-static bool is_king(piece_ptr_t p);
-static bool can_reach(piece_ptr_t p, board_ptr_t b, pos_t pos);
+static bool is_moved(piece_ptr_t p);
+static bool is(piece_ptr_t p, const char *const type);
+static bool can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos);
+static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos);
 static side_t get_side(piece_ptr_t p);
 static void on_move(piece_ptr_t p, board_ptr_t b);
-
-// TODO: castle
 
 /** @brief the rook piece */
 struct rook_t {
@@ -33,11 +35,15 @@ struct rook_t {
 static const piece_interface_t vtable = (piece_interface_t) {
 	.copy = copy,
 	.free = piece_free,
-	.is_king = is_king,
-	.can_move_to = piece_can_move_to,
-	.can_reach = can_reach,
+	.is_moved = is_moved,
+	.is = is,
+	.can_walk = can_walk,
+	.can_control = can_control,
+	.can_attack = piece_can_attack,
+	.can_move = piece_can_move,
 	.all = piece_all,
-	.get_side = get_side
+	.get_side = get_side,
+	.on_move = on_move,
 };
 
 piece_ptr_t rook_create(side_t side)
@@ -60,41 +66,85 @@ piece_ptr_t rook_create(side_t side)
 static piece_ptr_t copy(piece_ptr_t p)
 {
 	rook_t *this = p.rook;
-	rook_t ret = rook_create(this->side).rook;
-	ret.moved = this->moved;
+	rook_t *ret = rook_create(this->side).rook;
+	ret->moved = this->moved;
 
 	return (piece_ptr_t) {
 		.rook = ret
 	};
 }
 
-static bool can_reach(piece_ptr_t p, board_ptr_t b, pos_t pos)
+static bool is_moved(piece_ptr_t p)
 {
 	rook_t *this = p.rook;
 
-	pos_t cur_pos = b.i->find(b, p);
-	if (cur_pos.row != pos.row ^ cur_pos.col != pos.col)
-		return false;
+	return this->moved;
+}
 
-	piece_ptr_t **state = b.i->get_state(b);
-	if (cur_pos.row == pos.row) {
-		int next = pos.col - cur_pos.col > 0 ? 1 : -1;
-		for (int i = cur_pos.col + next; i != pos.col; i += next) {
-			if (state[pos.row][i].ptr != NULL) {
-				free(state);
-				return false;
-			}
-		}
+static bool is(piece_ptr_t p, const char *const type)
+{
+	return strcmp(type, "rook") == 0;
+}
+
+static bool can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos)
+{
+	rook_t *this = p.rook;
+
+	if (b.i->at(b, pos).ptr)
+		return false;
+	pos_t cur_pos = b.i->find(b, p);
+	if (!(cur_pos.col == pos.col ^ cur_pos.row == pos.row))
+		return false;
+	int next_col;
+	int next_row;
+	if (cur_pos.col == pos.col) {
+		next_col = 0;
+		next_row = cur_pos.row < pos.row ? 1 : -1;
 	} else {
-		int next = pos.row - cur_pos.row > 0 ? 1 : -1;
-		for (int i = cur_pos.row + next; i != pos.row; i += next) {
-			if (state[i][pos.col].ptr != NULL) {
-				free(state);
-				return false;
-			}
-		}
+		next_row = 0;
+		next_col = cur_pos.col < pos.col ? 1 : -1;
 	}
-	free(state);
+
+	while (true) {
+		cur_pos.col += next_col;
+		cur_pos.row += next_row;
+		
+		if (cur_pos.col == pos.col && cur_pos.row == pos.row)
+			return true;
+		if (b.i->at(b, cur_pos).ptr)
+			return false;
+	}
+
+	return true; /* garbage value */
+}
+
+static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
+{
+	/* rook_t *this = p.rook; */
+
+	pos_t cur_pos = b.i->find(b, p);
+
+	if (!(cur_pos.col == pos.col ^ cur_pos.row == pos.row))
+		return false;
+	int next_col;
+	int next_row;
+	if (cur_pos.col == pos.col) {
+		next_col = 0;
+		next_row = cur_pos.row < pos.row ? 1 : -1;
+	} else {
+		next_row = 0;
+		next_col = cur_pos.col < pos.col ? 1 : -1;
+	}
+
+	while (true) {
+		cur_pos.col += next_col;
+		cur_pos.row += next_row;
+		if (cur_pos.col == pos.col && cur_pos.row == pos.row)
+			return true;
+		if (b.i->at(b, cur_pos).ptr)
+			return false;
+	} 
+
 	return true;
 }
 
