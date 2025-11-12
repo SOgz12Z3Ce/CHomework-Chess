@@ -19,6 +19,7 @@
 #include "rook.h"
 #include "queen.h"
 #include "bishop.h"
+#include "knight.h"
 
 /** @brief abstract for pieces */
 union __attribute__ ((__transparent_union__)) piece_ptr_t {
@@ -28,7 +29,7 @@ union __attribute__ ((__transparent_union__)) piece_ptr_t {
 	queen_t *queen;
 	rook_t *rook;
 	bishop_t *bishop;
-	// knight_t *knight;
+	knight_t *knight;
 	// pawn_t *pawn;
 };
 
