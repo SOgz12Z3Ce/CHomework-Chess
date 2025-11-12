@@ -97,7 +97,7 @@ static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
 			return true;
 		if (b.i->at(b, cur_pos).ptr)
 			return false;
-	} 
+	}
 
 	return true;
 }
