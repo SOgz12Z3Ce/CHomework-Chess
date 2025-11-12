@@ -8,6 +8,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "piece.h"
 #include "board.h"
@@ -16,6 +17,12 @@
 void piece_free(piece_ptr_t p)
 {
 	free(p.ptr);
+}
+
+void piece_is_moved(piece_ptr_t p)
+{
+	printf("fatal error at piece_is_moved: Unexpected calling.");
+	exit(1);
 }
 
 bool piece_can_attack(piece_ptr_t p, board_ptr_t b, pos_t pos)

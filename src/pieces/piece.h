@@ -123,6 +123,7 @@ struct piece_interface_t {
 /* base methods */
 
 void piece_free(piece_ptr_t p);
+void piece_is_moved(piece_ptr_t p);
 bool piece_can_attack(piece_ptr_t p, board_ptr_t b, pos_t pos);
 bool piece_can_move(piece_ptr_t p, board_ptr_t b, pos_t pos);
 pos_t *piece_all(piece_ptr_t p, board_ptr_t b, size_t *size,
