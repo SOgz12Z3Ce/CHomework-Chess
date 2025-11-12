@@ -155,7 +155,7 @@ static pos_t find(board_ptr_t b, piece_ptr_t p)
 				return pos_create(i, j);
 		}
 	}
-	printf("fatal error at find() in stdboard.c: Not found piece.");
+	printf("fatal error at find: Not found piece.");
 	exit(1);
 
 	return pos_create(-1, -1); /* garbage value for complier to check */
