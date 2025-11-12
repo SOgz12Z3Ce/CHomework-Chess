@@ -2,7 +2,7 @@
  * @file queen.c
  * @brief implement `queen.h`
  * @author SOgz12Z3Ce
- * @date 2025-10-12
+ * @date 2025-11-12
  * @version 1.0
  */
 
