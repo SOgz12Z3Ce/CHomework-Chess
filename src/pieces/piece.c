@@ -25,6 +25,14 @@ void piece_is_moved(piece_ptr_t p)
 	exit(1);
 }
 
+bool piece_can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos)
+{
+	if (b.i->at(b, pos).ptr)
+		return false;
+
+	return p.i->can_control(p, b, pos);
+}
+
 bool piece_can_attack(piece_ptr_t p, board_ptr_t b, pos_t pos)
 {
 	if (!p.i->can_control(p, b, pos))

@@ -17,13 +17,14 @@
 #include "position.h"
 #include "king.h"
 #include "rook.h"
+#include "queen.h"
 
 /** @brief abstract for pieces */
 union __attribute__ ((__transparent_union__)) piece_ptr_t {
 	void *ptr;
 	piece_interface_t *i;
 	king_t *king;
-	// queen_t *queen;
+	queen_t *queen;
 	rook_t *rook;
 	// bishop_t *bishop;
 	// knight_t *knight;
@@ -124,6 +125,7 @@ struct piece_interface_t {
 
 void piece_free(piece_ptr_t p);
 void piece_is_moved(piece_ptr_t p);
+bool piece_can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos);
 bool piece_can_attack(piece_ptr_t p, board_ptr_t b, pos_t pos);
 bool piece_can_move(piece_ptr_t p, board_ptr_t b, pos_t pos);
 pos_t *piece_all(piece_ptr_t p, board_ptr_t b, size_t *size,
