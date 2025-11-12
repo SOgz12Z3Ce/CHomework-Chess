@@ -18,8 +18,7 @@
 #include "mallocer.h"
 #include "state.h"
 #include "move.h"
-
-#define dist(a, b) ((a) > (b) ? ((a) - (b)) : ((b) - (a)))
+#include "distance.h"
 
 #define A_COLUMN 0
 #define C_COLUMN 2
