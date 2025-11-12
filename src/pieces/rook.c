@@ -20,7 +20,6 @@
 static piece_ptr_t copy(piece_ptr_t p);
 static bool is_moved(piece_ptr_t p);
 static bool is(piece_ptr_t p, const char *const type);
-static bool can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos);
 static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos);
 static side_t get_side(piece_ptr_t p);
 static void on_move(piece_ptr_t p, board_ptr_t b);
@@ -37,7 +36,7 @@ static const piece_interface_t vtable = (piece_interface_t) {
 	.free = piece_free,
 	.is_moved = is_moved,
 	.is = is,
-	.can_walk = can_walk,
+	.can_walk = piece_can_walk,
 	.can_control = can_control,
 	.can_attack = piece_can_attack,
 	.can_move = piece_can_move,
@@ -84,38 +83,6 @@ static bool is_moved(piece_ptr_t p)
 static bool is(piece_ptr_t p, const char *const type)
 {
 	return strcmp(type, "rook") == 0;
-}
-
-static bool can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos)
-{
-	rook_t *this = p.rook;
-
-	if (b.i->at(b, pos).ptr)
-		return false;
-	pos_t cur_pos = b.i->find(b, p);
-	if (!(cur_pos.col == pos.col ^ cur_pos.row == pos.row))
-		return false;
-	int next_col;
-	int next_row;
-	if (cur_pos.col == pos.col) {
-		next_col = 0;
-		next_row = cur_pos.row < pos.row ? 1 : -1;
-	} else {
-		next_row = 0;
-		next_col = cur_pos.col < pos.col ? 1 : -1;
-	}
-
-	while (true) {
-		cur_pos.col += next_col;
-		cur_pos.row += next_row;
-		
-		if (cur_pos.col == pos.col && cur_pos.row == pos.row)
-			return true;
-		if (b.i->at(b, cur_pos).ptr)
-			return false;
-	}
-
-	return true; /* garbage value */
 }
 
 static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
