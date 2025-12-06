@@ -73,7 +73,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 	renderer = SDL_CreateRenderer(window, NULL);
 	SDL_SetRenderLogicalPresentation(renderer, WINDOW_W, WINDOW_H, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
-	/* front */
+	/* font */
 	TTF_Init();
 	font = TTF_OpenFont(font_path, 48);
 
