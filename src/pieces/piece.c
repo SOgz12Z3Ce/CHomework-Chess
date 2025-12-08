@@ -19,10 +19,12 @@ void piece_free(piece_ptr_t p)
 	free(p.ptr);
 }
 
-void piece_is_moved(piece_ptr_t p)
+bool piece_is_moved(piece_ptr_t p)
 {
-	printf("fatal error at piece_is_moved: Unexpected calling.");
-	exit(1);
+	/* 原类型未实现 is_moved，返回 false 并打印以便调试 */
+	/* 不再调用 exit*/
+	fprintf(stderr, "warning: piece_is_moved called on type without implementation\n");
+	return false;
 }
 
 bool piece_can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos)
@@ -64,7 +66,8 @@ bool piece_can_move(piece_ptr_t p, board_ptr_t b, pos_t pos)
 	/* check is board valid */
 	board_ptr_t tmp = b.i->copy(b);
 	tmp.i->move(tmp, move_create(cur_pos, pos));
-	if (tmp.i->get_checking(tmp) & p.i->get_side(p)) {
+	if (tmp.i->get_checking(tmp) & p.i->get_side(p))
+	{
 		/* cause checked */
 		tmp.i->free(tmp);
 		return false;
@@ -75,15 +78,17 @@ bool piece_can_move(piece_ptr_t p, board_ptr_t b, pos_t pos)
 }
 
 pos_t *piece_all(piece_ptr_t p, board_ptr_t b, size_t *size,
-                 all_callback_t callback)
+				 all_callback_t callback)
 {
 	size_t row_size = b.i->get_row_size(b);
 	size_t col_size = b.i->get_col_size(b);
 
 	pos_t *ret = new_array(pos_t, b.i->get_square_num(b));
 	size_t ret_size = 0;
-	for (size_t i = 0; i < row_size; i++) {
-		for (size_t j = 0; j < col_size; j++) {
+	for (size_t i = 0; i < row_size; i++)
+	{
+		for (size_t j = 0; j < col_size; j++)
+		{
 			pos_t pos = pos_create(i, j);
 			if (callback(p, b, pos))
 				ret[ret_size++] = pos;
@@ -105,19 +110,19 @@ bool is_same_side(piece_ptr_t p1, piece_ptr_t p2)
 }
 
 size_t get_moveable_num(piece_ptr_t p, board_ptr_t b,
-                        int next_col, int next_row)
+						int next_col, int next_row)
 {
 	size_t col_size = b.i->get_col_size(b);
 	size_t row_size = b.i->get_row_size(b);
 
 	size_t ret = 0;
 	pos_t pos = b.i->find(b, p);
-	do {
+	do
+	{
 		pos.col += next_col;
 		pos.row += next_row;
 		ret++;
-	} while ((pos.col < col_size && pos.row < row_size)
-	         && !b.i->at(b, pos).ptr);
-	
+	} while ((pos.col < col_size && pos.row < row_size) && !b.i->at(b, pos).ptr);
+
 	return ret - 1;
 }

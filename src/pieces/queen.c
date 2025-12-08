@@ -24,12 +24,13 @@ static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos);
 static side_t get_side(piece_ptr_t p);
 
 /** @brief the queen piece */
-struct queen_t {
+struct queen_t
+{
 	piece_interface_t i;
 	side_t side; /**< @brief `SIDE_WHITE` or `SIDE_BLACK` */
 };
 
-static const piece_interface_t vtable = (piece_interface_t) {
+static const piece_interface_t vtable = (piece_interface_t){
 	.copy = copy,
 	.free = piece_free,
 	.is_moved = piece_is_moved,
@@ -46,17 +47,16 @@ static const piece_interface_t vtable = (piece_interface_t) {
 piece_ptr_t queen_create(side_t side)
 {
 	queen_t *ret = new(queen_t);
-	if (!ret) {
+	if (!ret)
+	{
 		printf("fatal error at queen_create: Not enough memory.\n");
 		exit(1);
 	}
-	*ret = (queen_t) {
+	*ret = (queen_t){
 		.i = vtable,
-		.side = side
-	};
-	return (piece_ptr_t) {
-		.queen = ret
-	};
+		.side = side};
+	return (piece_ptr_t){
+		.queen = ret};
 }
 
 static piece_ptr_t copy(piece_ptr_t p)
@@ -78,8 +78,7 @@ static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
 	pos_t cur_pos = b.i->find(b, p);
 	if (cur_pos.row == pos.row && cur_pos.col == pos.col)
 		return false;
-	if (cur_pos.row != pos.row && cur_pos.col != pos.col
-	    && dist(cur_pos.row, pos.row) != dist(cur_pos.col, pos.col))
+	if (cur_pos.row != pos.row && cur_pos.col != pos.col && dist(cur_pos.row, pos.row) != dist(cur_pos.col, pos.col))
 		return false;
 
 	int next_col = 0;
@@ -88,9 +87,10 @@ static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
 		next_row = cur_pos.row < pos.row ? 1 : -1;
 	if (cur_pos.col != pos.col)
 		next_col = cur_pos.col < pos.col ? 1 : -1;
-	pos_t cur_pos = b.i->find(b, p);
+	cur_pos = b.i->find(b, p);
 
-	while (true) {
+	while (true)
+	{
 		cur_pos.col += next_col;
 		cur_pos.row += next_row;
 		if (cur_pos.col == pos.col && cur_pos.row == pos.row)
