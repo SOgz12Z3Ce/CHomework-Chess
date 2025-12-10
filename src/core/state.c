@@ -9,9 +9,9 @@
 #include <stddef.h>
 #include <string.h>
 
-#include "state.h"
-#include "piece.h"
-#include "mallocer.h"
+#include "core/state.h"
+#include "core/pieces/piece.h"
+#include "core/mallocer.h"
 
 void state_free(piece_ptr_t **state, size_t row_size)
 {

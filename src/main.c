@@ -2,10 +2,10 @@
 
 #include <stdio.h>
 
-#include "board.h"
-#include "stdboard.h"
-#include "piece.h"
-#include "king.h"
+#include "core/boards/board.h"
+#include "core/boards/stdboard.h"
+#include "core/pieces/piece.h"
+#include "core/pieces/king.h"
 
 int main(void)
 {

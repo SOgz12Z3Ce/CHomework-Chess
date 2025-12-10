@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "piece_base.h"
-#include "board_base.h"
-#include "position.h"
+#include "core/pieces/piece_base.h"
+#include "core/boards/board_base.h"
+#include "core/position.h"
 
 /** @brief represents white and black side */
 typedef uint64_t side_t;

@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 
-#include "position.h"
+#include "core/position.h"
 
 /* struct of a move */
 typedef struct move

@@ -11,14 +11,14 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "stdboard.h"
-#include "board.h"
-#include "piece.h"
-#include "mallocer.h"
-#include "position.h"
-#include "move.h"
-#include "state.h"
-#include "king.h"
+#include "core/boards/stdboard.h"
+#include "core/boards/board.h"
+#include "core/pieces/piece.h"
+#include "core/mallocer.h"
+#include "core/position.h"
+#include "core/move.h"
+#include "core/state.h"
+#include "core/pieces/king.h"
 
 #define STDBOARD_ROW_SIZE 8
 #define STDBOARD_COL_SIZE 8

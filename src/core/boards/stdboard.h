@@ -11,7 +11,7 @@
 
 typedef struct stdboard_t stdboard_t;
 
-#include "board.h"
+#include "core/boards/board.h"
 
 /**
  * @brief create a standard board

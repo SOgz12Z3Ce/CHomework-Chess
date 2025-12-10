@@ -11,7 +11,7 @@
 
 typedef struct pawn_t pawn_t;
 
-#include "piece.h"
+#include "core/pieces/piece.h"
 
 /**
  * @brief create a pawn piece

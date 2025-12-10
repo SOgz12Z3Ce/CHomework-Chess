@@ -11,7 +11,7 @@
 
 typedef struct knight_t knight_t;
 
-#include "piece.h"
+#include "core/pieces/piece.h"
 
 /**
  * @brief create a knight piece

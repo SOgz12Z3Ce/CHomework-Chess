@@ -11,10 +11,10 @@
 
 #include <stddef.h>
 
-#include "piece_base.h"
-#include "piece.h"
-#include "stdboard.h"
-#include "move.h"
+#include "core/pieces/piece_base.h"
+#include "core/pieces/piece.h"
+#include "core/boards/stdboard.h"
+#include "core/move.h"
 
 /** @brief abstract for boards */
 union __attribute__ ((__transparent_union__)) board_ptr_t {

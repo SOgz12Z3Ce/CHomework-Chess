@@ -11,7 +11,7 @@
 
 typedef struct bishop_t bishop_t;
 
-#include "piece.h"
+#include "core/pieces/piece.h"
 
 /**
  * @brief create a bishop piece

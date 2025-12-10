@@ -12,15 +12,15 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-#include "piece_base.h"
-#include "board.h"
-#include "position.h"
-#include "king.h"
-#include "rook.h"
-#include "queen.h"
-#include "bishop.h"
-#include "knight.h"
-#include "pawn.h"
+#include "core/pieces/piece_base.h"
+#include "core/boards/board.h"
+#include "core/position.h"
+#include "core/pieces/king.h"
+#include "core/pieces/rook.h"
+#include "core/pieces/queen.h"
+#include "core/pieces/bishop.h"
+#include "core/pieces/knight.h"
+#include "core/pieces/pawn.h"
 
 /** @brief abstract for pieces */
 union __attribute__ ((__transparent_union__)) piece_ptr_t {
@@ -127,7 +127,7 @@ struct piece_interface_t {
 /* base methods */
 
 void piece_free(piece_ptr_t p);
-void piece_is_moved(piece_ptr_t p);
+bool piece_is_moved(piece_ptr_t p);
 bool piece_can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos);
 bool piece_can_attack(piece_ptr_t p, board_ptr_t b, pos_t pos);
 bool piece_can_move(piece_ptr_t p, board_ptr_t b, pos_t pos);

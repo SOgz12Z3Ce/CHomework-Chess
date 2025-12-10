@@ -12,7 +12,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#include "piece.h"
+#include "core/pieces/piece.h"
 
 void state_free(piece_ptr_t **state, size_t row_size);
 piece_ptr_t **state_create(size_t row_size, size_t col_size);

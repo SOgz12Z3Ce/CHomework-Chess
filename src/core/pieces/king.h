@@ -11,7 +11,7 @@
 
 typedef struct king_t king_t;
 
-#include "piece.h"
+#include "core/pieces/piece.h"
 
 /**
  * @brief create a king piece

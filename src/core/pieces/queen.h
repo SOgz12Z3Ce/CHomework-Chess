@@ -11,7 +11,7 @@
 
 typedef struct queen_t queen_t;
 
-#include "piece.h"
+#include "core/pieces/piece.h"
 
 /**
  * @brief create a queen piece

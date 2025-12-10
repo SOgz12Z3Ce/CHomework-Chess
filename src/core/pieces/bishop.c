@@ -11,12 +11,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "bishop.h"
-#include "piece.h"
-#include "board.h"
-#include "position.h"
-#include "mallocer.h"
-#include "distance.h"
+#include "core/pieces/bishop.h"
+#include "core/pieces/piece.h"
+#include "core/boards/board.h"
+#include "core/position.h"
+#include "core/mallocer.h"
+#include "core/pieces/distance.h"
 
 static piece_ptr_t copy(piece_ptr_t p);
 static bool is(piece_ptr_t p, const char *const type);
@@ -87,7 +87,6 @@ static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
 		next_row = cur_pos.row < pos.row ? 1 : -1;
 	if (cur_pos.col != pos.col)
 		next_col = cur_pos.col < pos.col ? 1 : -1;
-	pos_t cur_pos = b.i->find(b, p);
 
 	while (true) {
 		cur_pos.col += next_col;

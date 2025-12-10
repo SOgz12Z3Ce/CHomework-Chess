@@ -11,12 +11,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "pawn.h"
-#include "piece.h"
-#include "board.h"
-#include "position.h"
-#include "mallocer.h"
-#include "distance.h"
+#include "core/pieces/pawn.h"
+#include "core/pieces/piece.h"
+#include "core/boards/board.h"
+#include "core/position.h"
+#include "core/mallocer.h"
+#include "core/pieces/distance.h"
 
 static piece_ptr_t copy(piece_ptr_t p);
 static bool is_moved(piece_ptr_t p);

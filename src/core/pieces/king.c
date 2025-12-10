@@ -11,14 +11,14 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "king.h"
-#include "piece.h"
-#include "board.h"
-#include "position.h"
-#include "mallocer.h"
-#include "state.h"
-#include "move.h"
-#include "distance.h"
+#include "core/pieces/king.h"
+#include "core/pieces/piece.h"
+#include "core/boards/board.h"
+#include "core/position.h"
+#include "core/mallocer.h"
+#include "core/state.h"
+#include "core/move.h"
+#include "core/pieces/distance.h"
 
 #define A_COLUMN 0
 #define C_COLUMN 2

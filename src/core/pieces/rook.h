@@ -11,7 +11,7 @@
 
 typedef struct rook_t rook_t;
 
-#include "piece.h"
+#include "core/pieces/piece.h"
 
 /**
  * @brief create a rook piece

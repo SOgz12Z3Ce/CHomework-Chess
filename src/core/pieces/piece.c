@@ -10,16 +10,16 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "piece.h"
-#include "board.h"
-#include "mallocer.h"
+#include "core/pieces/piece.h"
+#include "core/boards/board.h"
+#include "core/mallocer.h"
 
 void piece_free(piece_ptr_t p)
 {
 	free(p.ptr);
 }
 
-void piece_is_moved(piece_ptr_t p)
+bool piece_is_moved(piece_ptr_t p)
 {
 	printf("fatal error at piece_is_moved: Unexpected calling.");
 	exit(1);
