@@ -24,12 +24,13 @@ static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos);
 static side_t get_side(piece_ptr_t p);
 
 /** @brief the bishop piece */
-struct bishop_t {
+struct bishop_t
+{
 	piece_interface_t i;
 	side_t side; /**< @brief `SIDE_WHITE` or `SIDE_BLACK` */
 };
 
-static const piece_interface_t vtable = (piece_interface_t) {
+static const piece_interface_t vtable = (piece_interface_t){
 	.copy = copy,
 	.free = piece_free,
 	.is_moved = piece_is_moved,
@@ -46,17 +47,16 @@ static const piece_interface_t vtable = (piece_interface_t) {
 piece_ptr_t bishop_create(side_t side)
 {
 	bishop_t *ret = new(bishop_t);
-	if (!ret) {
+	if (!ret)
+	{
 		printf("fatal error at bishop_create: Not enough memory.\n");
 		exit(1);
 	}
-	*ret = (bishop_t) {
+	*ret = (bishop_t){
 		.i = vtable,
-		.side = side
-	};
-	return (piece_ptr_t) {
-		.bishop = ret
-	};
+		.side = side};
+	return (piece_ptr_t){
+		.bishop = ret};
 }
 
 static piece_ptr_t copy(piece_ptr_t p)
@@ -88,7 +88,8 @@ static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
 	if (cur_pos.col != pos.col)
 		next_col = cur_pos.col < pos.col ? 1 : -1;
 
-	while (true) {
+	while (true)
+	{
 		cur_pos.col += next_col;
 		cur_pos.row += next_row;
 		if (cur_pos.col == pos.col && cur_pos.row == pos.row)
