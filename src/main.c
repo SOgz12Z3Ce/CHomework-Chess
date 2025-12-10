@@ -1,50 +1,77 @@
 #define SDL_MAIN_USE_CALLBACKS 1
 
-#include <stdio.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_image/SDL_image.h>
+#include "gui/common.h"
+#include "gui/utils.h"
+#include "core/game/game.h"
 
-#include "core/boards/board.h"
-#include "core/boards/stdboard.h"
-#include "core/pieces/piece.h"
-#include "core/pieces/king.h"
+static SDL_Window *window = NULL;
+static SDL_Renderer *renderer = NULL;
+static TTF_Font *font = NULL;
+static char *const fonts_full_dir = "";
+static char *const images_full_dir = "";
 
-int main(void)
+SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
-	board_ptr_t board = stdboard_create();
-	board.i->put(board, king_create(SIDE_BLACK), pos_create(0, 2));
-	board.i->put(board, king_create(SIDE_WHITE), pos_create(7, 4));
-	board.i->put(board, rook_create(SIDE_BLACK), pos_create(0, 4));
-	board.i->put(board, rook_create(SIDE_WHITE), pos_create(2, 4));
-	board.i->put(board, rook_create(SIDE_WHITE), pos_create(7, 0));
-	board.i->put(board, rook_create(SIDE_WHITE), pos_create(7, 7));
-	board.i->put(board, rook_create(SIDE_BLACK), pos_create(2, 0));
-	piece_ptr_t the_rook = board.i->at(board, pos_create(7, 4));
-	size_t size[4];
-	pos_t *walkable = the_rook.i->all(the_rook, board, &size[0], the_rook.i->can_walk);
-	pos_t *attackable = the_rook.i->all(the_rook, board, &size[1], the_rook.i->can_attack);
-	pos_t *controlable = the_rook.i->all(the_rook, board, &size[2], the_rook.i->can_control);
-	pos_t *moveable = the_rook.i->all(the_rook, board, &size[3], the_rook.i->can_move);
-	printf("walkable\n");
-	for (size_t i = 0; i < size[0]; i++) {
-		printf("row: %zu, col: %zu\n", walkable[i].row, walkable[i].col);
-	}
-	printf("attackable\n");
-	for (size_t i = 0; i < size[1]; i++) {
-		printf("row: %zu, col: %zu\n", attackable[i].row, attackable[i].col);
-	}
-	printf("controlable\n");
-	for (size_t i = 0; i < size[2]; i++) {
-		printf("row: %zu, col: %zu\n", controlable[i].row, controlable[i].col);
-	}
-	printf("moveable\n");
-	for (size_t i = 0; i < size[3]; i++) {
-		printf("row: %zu, col: %zu\n", moveable[i].row, moveable[i].col);
-	}
-	board.i->move(board, move_create(pos_create(7, 4), pos_create(7, 2)));
-	printf("-----------");
-	piece_ptr_t tmp1 = board.i->at(board, pos_create(7, 2));
-	piece_ptr_t tmp2 = board.i->at(board, pos_create(7, 3));
-	printf("%d", tmp1.i->is(tmp1, "king"));
-	printf("%d", tmp2.i->is(tmp2, "rook"));
+	/* env */
+	strcpy(fonts_full_dir, SDL_GetBasePath());
+	strcat(fonts_full_dir, FONTS_DIR);
 
-	return 0;
+	strcpy(images_full_dir, SDL_GetBasePath());
+	strcat(images_full_dir, IMAGES_DIR);
+
+	/* basic */
+	SDL_Init(SDL_INIT_VIDEO);
+	window = SDL_CreateWindow("app", WINDOW_W, WINDOW_H, SDL_WINDOW_RESIZABLE | SDL_WINDOW_BORDERLESS);
+	renderer = SDL_CreateRenderer(window, NULL);
+	SDL_SetRenderLogicalPresentation(renderer, WINDOW_W, WINDOW_H, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
+	/* font */
+	TTF_Init();
+	char main_font_full_path[PATH_MAX] = "";
+	strcpy(main_font_full_path, fonts_full_dir);
+	strcat(main_font_full_path, FONT_MAIN_PATH);
+	font = TTF_OpenFont(main_font_full_path, 48);
+
+	/* appstate */
+	appstate_t *as = (appstate_t *)malloc(sizeof(appstate_t));
+	as->running = true;
+	*appstate = as;
+
+	return SDL_APP_CONTINUE;
+}
+
+SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
+{
+	appstate_t *as = (appstate_t *)appstate;
+
+	switch (event->type)
+	{
+	case SDL_EVENT_QUIT:
+		return SDL_APP_SUCCESS;
+	default:
+		break;
+	}
+
+	if (!as->running)
+		return SDL_APP_SUCCESS;
+	return SDL_APP_CONTINUE;
+}
+
+SDL_AppResult SDL_AppIterate(void *appstate)
+{
+	appstate_t *as = (appstate_t *)appstate;
+
+	if (as->game.state == GAME_UPDATING)
+		game_update(&as->game, as->game.command);
+
+	return SDL_APP_CONTINUE;
+}
+
+void SDL_AppQuit(void *appstate, SDL_AppResult result)
+{
+
 }
