@@ -127,7 +127,7 @@ struct piece_interface_t {
 /* base methods */
 
 void piece_free(piece_ptr_t p);
-void piece_is_moved(piece_ptr_t p);
+bool piece_is_moved(piece_ptr_t p);
 bool piece_can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos);
 bool piece_can_attack(piece_ptr_t p, board_ptr_t b, pos_t pos);
 bool piece_can_move(piece_ptr_t p, board_ptr_t b, pos_t pos);
