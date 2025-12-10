@@ -18,6 +18,7 @@ typedef struct move
 {
 	pos_t src; /*> the source position of a move */
 	pos_t dest; /*> the destination position of a move */
+	char disambiguation;
 } move_t;
 
 const static move_t move_null = {
@@ -25,6 +26,6 @@ const static move_t move_null = {
 	.dest = 0
 };
 
-#define move_create(s, d) ((move_t){.src = (s), .dest = (d)})
+#define move_create(s, d) ((move_t){.src = (s), .dest = (d), .disambiguation = '\0'})
 
 #endif /* MOVE_H_ */

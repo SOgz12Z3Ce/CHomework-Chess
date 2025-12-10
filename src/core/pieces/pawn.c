@@ -24,6 +24,7 @@ static bool is(piece_ptr_t p, const char *const type);
 static bool can_walk(piece_ptr_t p, board_ptr_t b, pos_t pos);
 static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos);
 static side_t get_side(piece_ptr_t p);
+static void on_move(piece_ptr_t p, board_ptr_t b);
 
 static int get_forward(pawn_t *p);
 
@@ -125,4 +126,32 @@ static side_t get_side(piece_ptr_t p)
 static int get_forward(pawn_t *p)
 {
 	return p->side == SIDE_BLACK ? 1 : -1;
+}
+
+static void on_move(piece_ptr_t p, board_ptr_t b)
+{
+	pawn_t *this = p.pawn;
+
+	move_t last_move = b.i->get_last_move(b);
+	if (last_move.dest.row != 0)
+		return;
+
+	piece_ptr_t tmp_p;
+	switch (last_move.disambiguation) {
+		case 'q':
+			tmp_p = queen_create(this->side);
+			break;
+		case 'r':
+			tmp_p = rook_create(this->side);
+			break;
+		case 'b':
+			tmp_p = bishop_create(this->side);
+			break;
+		case 'n':
+			tmp_p = knight_create(this->side);
+			break;
+	}
+	pos_t cur_pos = b.i->find(b, p);
+	b.i->remove(b, cur_pos);
+	b.i->put(b, tmp_p, cur_pos);
 }
