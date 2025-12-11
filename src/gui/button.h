@@ -4,6 +4,8 @@
 #include <SDL3/SDL.h>
 #include "common.h"
 
+#define BUTTONS_MAX 256
+
 typedef enum button_state_t button_state_t;
 typedef struct button_t button_t;
 typedef void (*button_callback_t)(button_t *, appstate_t *);
@@ -18,7 +20,7 @@ struct button_t {
 	button_state_t state;
 	SDL_Color color;
 	SDL_Texture *content;
-	bool movetable;
+	bool moveable;
 	button_callback_t init;
 	button_callback_t on_press;
 	button_callback_t on_release;
@@ -30,7 +32,7 @@ button_t *create_button(
 	SDL_FRect rect,
 	SDL_Color color,
 	SDL_Texture *content,
-	bool movetable,
+	bool moveable,
 	button_callback_t init,
 	button_callback_t on_press,
 	button_callback_t on_release,
@@ -39,5 +41,6 @@ button_t *create_button(
 );
 void nop(button_t *self, appstate_t *as);
 void button_update(SDL_Renderer *renderer, button_t *self, appstate_t *as);
+void button_free(button_t *self);
 
 #endif /* BUTTON_H_ */

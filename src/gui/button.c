@@ -7,7 +7,7 @@ button_t *create_button(
 	SDL_FRect rect,
 	SDL_Color color,
 	SDL_Texture *content,
-	bool movetable,
+	bool moveable,
 	button_callback_t init,
 	button_callback_t on_press,
 	button_callback_t on_release,
@@ -18,9 +18,10 @@ button_t *create_button(
 	button_t *ret = (button_t *)malloc(sizeof(button_t));
 	(*ret) = (button_t){
 		.rect = rect,
+		.color = color,
 		.state = BUTTON_DEFAULT,
 		.content = content,
-		.movetable = movetable,
+		.moveable = moveable,
 		.init = init,
 		.on_press = on_press,
 		.on_release = on_release,
@@ -53,4 +54,10 @@ void button_update(SDL_Renderer *renderer, button_t *self, appstate_t *as)
 		.h = self->content->h
 	};
 	SDL_RenderTexture(renderer, self->content, NULL, &dest);
+}
+
+void button_free(button_t *self)
+{
+	SDL_DestroyTexture(self->content);
+	free(self);
 }

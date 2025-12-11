@@ -13,6 +13,11 @@ typedef struct appstate_t appstate_t;
 
 struct appstate_t {
 	bool running;
+	enum {
+		SCENE_MAINMENU,
+		SCENE_GAME
+	} scene;
+	bool chaging_scene;
 	game_t game;
 };
 
