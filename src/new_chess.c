@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <stdlib.h>
 
 // 棋子类型枚举（定义所有可能的棋子类型）
 enum PieceType {
@@ -33,6 +34,20 @@ enum Result {
     DRAW               // 和棋
 };
 
+// 走棋记录结构体（存储每一步棋的详细信息）
+struct MOVE {
+    int from_row;       // 起始行（0-7）
+    int from_col;       // 起始列（0-7）
+    int to_row;         // 目标行（0-7）
+    int to_col;         // 目标列（0-7）
+    enum PieceType moved_type;   // 移动的棋子类型
+    enum PieceType captured_type; // 被吃掉的棋子类型（EMPTY表示没吃子）
+    int is_castling;    // 是否是王车易位
+    int is_en_passant;  // 是否是吃过路兵
+    int is_promotion;   // 是否是兵升变
+    enum PieceType promoted_to;   // 升变后的棋子类型
+};
+
 // 棋子结构体（存储单个棋子的完整信息）
 struct PIECE {
     enum PieceType type;  // 棋子类型
@@ -61,6 +76,8 @@ struct GAMESTATE {
     int half_move_count;            // 半回合数（用于五十步规则）
     struct CastlingRights castling;  // 王车易位权限
     char en_passant_target[3];      // 吃过路兵目标位置（如"e3"，空字符串表示无）
+    struct MOVE moves[200];         // 走棋记录数组（最多200步）
+    int move_index;                 // 当前走棋记录索引
 };
 
 // 存档结构体（用于将游戏状态保存到文件）
@@ -71,11 +88,25 @@ struct GAME_SAVE {
     struct GAMESTATE game_state;    // 完整游戏状态
 };
 
+// 函数声明,思路更清晰
+void get_current_time(char *time_str, int max_len);
+void init_board(struct PIECE board[8][8]);
+void init_game_state(struct GAMESTATE *game, const char *white_name, const char *black_name);
+void record_move(struct GAMESTATE *game, int from_row, int from_col, int to_row, int to_col, enum PieceType captured_type);
+int save_game(const struct GAMESTATE *game, const char *save_name, const char *filename);
+int load_game(struct GAMESTATE *game, char *save_name, const char *filename);
+int validate_save(const struct GAME_SAVE *save);//应该不需要
+int list_saves(const char *save_dir);//列出所有存档?起什么作用
+
 // 获取当前时间字符串（用于存档日期）
 void get_current_time(char *time_str, int max_len) {
     time_t now = time(NULL);
     struct tm *tm_info = localtime(&now);
     strftime(time_str, max_len, "%Y-%m-%d %H:%M", tm_info);
+    //size_t strftime(char *s, size_t maxsize, const char *format, const struct tm *tm);
+    //时间格式化函数把时间结构体转化为字符串
+    //%Y-%m-%d %H:%M 是时间格式化字符串，用于指定输出的时间格式
+    //%Y 表示四位数的年份，%m 表示两位数的月份，%d 表示两位数的日期，%H 表示两位数的小时（24小时制），%M 表示两位数的分钟
 }
 
 // 初始化棋盘（设置初始棋子位置）
@@ -141,7 +172,8 @@ void init_game_state(struct GAMESTATE *game, const char *white_name, const char 
     strncpy(game->player_black, black_name, sizeof(game->player_black) - 1);
     game->player_white[sizeof(game->player_white) - 1] = '\0';  // 确保字符串结束符
     game->player_black[sizeof(game->player_black) - 1] = '\0';  // 确保字符串结束符
-
+    //结构体指针通过 -> 操作符访问成员
+    
     // 设置初始游戏状态
     game->current_turn = WHITE_TURN;  // 白方先行
     game->result = NOT_FINISHED;      // 游戏未结束
@@ -158,6 +190,53 @@ void init_game_state(struct GAMESTATE *game, const char *white_name, const char 
 
     // 初始化吃过路兵目标（无）
     game->en_passant_target[0] = '\0';
+    
+    // 初始化走棋记录
+    game->move_index = 0;
+    memset(game->moves, 0, sizeof(game->moves));
+}
+
+// 记录每步棋非常复杂！！！
+void record_move(struct GAMESTATE *game, int from_row, int from_col, int to_row, int to_col, enum PieceType captured_type) {
+    if (game->move_index >= 200) {
+        printf("警告：走棋记录已达上限，无法记录更多步数！\n");
+        return;
+    }
+    
+    struct MOVE *move = &game->moves[game->move_index];
+    
+    // 基本移动信息
+    move->from_row = from_row;
+    move->from_col = from_col;
+    move->to_row = to_row;
+    move->to_col = to_col;
+    move->moved_type = game->board[from_row][from_col].type;
+    move->captured_type = captured_type;
+    
+    // 默认为普通移动
+    move->is_castling = 0;
+    move->is_en_passant = 0;
+    move->is_promotion = 0;
+    move->promoted_to = EMPTY;
+    
+    // 检查是否是王车易位
+    if (move->moved_type == KING && abs(to_col - from_col) == 2) {
+        move->is_castling = 1;
+    }
+    
+    // 检查是否是吃过路兵
+    if (move->moved_type == PAWN && captured_type == EMPTY && from_col != to_col) {
+        move->is_en_passant = 1;
+    }
+    
+    // 检查是否是兵升变
+    if (move->moved_type == PAWN && (to_row == 0 || to_row == 7)) {
+        move->is_promotion = 1;
+        // 默认升变为后
+        move->promoted_to = QUEEN;
+    }
+    
+    game->move_index++;
 }
 
 // 保存游戏状态到二进制文件
@@ -165,7 +244,7 @@ int save_game(const struct GAMESTATE *game, const char *save_name, const char *f
     FILE *fp = NULL;
     struct GAME_SAVE save;
 
-    // 1. 填充存档信息
+    // 1. 填充存档信息（这里需要有输入的玩家名称？怎么实现输入）
     strncpy(save.save_name, save_name, sizeof(save.save_name) - 1);
     save.save_name[sizeof(save.save_name) - 1] = '\0';
     
@@ -175,68 +254,33 @@ int save_game(const struct GAMESTATE *game, const char *save_name, const char *f
     // 设置存档版本（用于后续兼容）
     save.save_version = 1;
     
-    // 复制游戏状态到存档结构体
+    // 复制游戏状态到存档结构体(这里的游戏状态应该也得有输入端吧，是不是要和其他部分关联？)
     save.game_state = *game;
+    
+    // 2. 验证存档完整性
+    if (validate_save(&save) != 0) {//括号内部是对函数返回值的判等
+        printf("错误：存档数据无效，无法保存！\n");
+        return 1;
+    }
 
-    // 2. 打开二进制文件（wb模式：重写文件）
+    // 3. 打开二进制文件（wb模式：重写文件）
     fp = fopen(filename, "wb");
     if (fp == NULL) {
         printf("错误：无法打开文件 %s 进行写入！\n", filename);
         return 1;  // 返回1表示失败
     }
 
-    // 3. 写入完整的存档结构体到文件
+    // 4. 写入完整的存档结构体到文件
     size_t written = fwrite(&save, sizeof(struct GAME_SAVE), 1, fp);
     
-    // 4. 关闭文件
+    // 5. 关闭文件
     fclose(fp);
-
-    // 5. 检查写入是否成功
+    // 6. 检查写入是否成功
     if (written != 1) {
         printf("错误：写入文件 %s 不完整！\n", filename);
         return 1;  // 返回1表示失败
     }
 
     printf("游戏已成功保存到 %s！\n", filename);
-    return 0;  // 返回0表示成功
-}
-
-// 从二进制文件加载游戏状态
-int load_game(struct GAMESTATE *game, char *save_name, const char *filename) {
-    FILE *fp = NULL;
-    struct GAME_SAVE save;
-
-    // 1. 打开二进制文件（rb模式：只读）
-    fp = fopen(filename, "rb");
-    if (fp == NULL) {
-        printf("错误：无法打开文件 %s 进行读取！\n", filename);
-        return 1;  // 返回1表示失败
-    }
-
-    // 2. 从文件读取完整的存档结构体
-    size_t read = fread(&save, sizeof(struct GAME_SAVE), 1, fp);
-    
-    // 3. 关闭文件
-    fclose(fp);
-
-    // 4. 检查读取是否成功
-    if (read != 1) {
-        printf("错误：读取文件 %s 不完整或格式错误！\n", filename);
-        return 1;  // 返回1表示失败
-    }
-
-    // 5. 复制存档中的游戏状态到输出参数
-    *game = save.game_state;
-    
-    // 6. 如果需要，返回存档名称
-    if (save_name != NULL) {
-        strncpy(save_name, save.save_name, 100);
-        save_name[99] = '\0';
-    }
-
-    printf("游戏已成功从 %s 加载！\n", filename);
-    printf("存档名称：%s\n", save.save_name);
-    printf("存档日期：%s\n", save.save_date);
-    printf("存档版本：%d\n", save.save_version);
     return 0;  // 返回0表示成功
 }
