@@ -39,5 +39,6 @@ static const SDL_Color color_blue = {
 bool in(float x, float y, SDL_FRect *rect);
 SDL_Texture *texture_from_str(SDL_Renderer *renderer, TTF_Font *font,
                               const char *str, const SDL_Color *color);
+SDL_Texture *texture_from_svg(SDL_Renderer *renderer, const char *path, size_t w, size_t h);
 
 #endif /* UTILS_H_ */
