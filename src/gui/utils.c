@@ -8,10 +8,10 @@ bool in(float x, float y, SDL_FRect *rect)
 	       && (y >= rect->y && y <= rect->y + rect->h);
 }
 
-SDL_Texture *texture_from_str(SDL_Renderer *renderer, const TTF_Font *font,
+SDL_Texture *texture_from_str(SDL_Renderer *renderer, TTF_Font *font,
                               const char *str, const SDL_Color *color)
 {
-	SDL_Surface *text = TTF_RenderText_Blended(font, s, 0, *color);
+	SDL_Surface *text = TTF_RenderText_Blended(font, str, 0, *color);
 	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, text);
 	SDL_DestroySurface(text);
 	

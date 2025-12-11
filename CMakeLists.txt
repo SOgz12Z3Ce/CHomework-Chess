@@ -33,6 +33,8 @@ target_sources(chess PRIVATE
 	"${SRC_DIR}/core/pieces/knight.c"
 	"${SRC_DIR}/core/pieces/pawn.c"
 	"${SRC_DIR}/core/game/game.c"
+	"${SRC_DIR}/gui/button.c"
+	"${SRC_DIR}/gui/utils.c"
 )
 target_link_libraries(chess PRIVATE
 	"${SDL3_DIR}/lib/libSDL3.dll.a"

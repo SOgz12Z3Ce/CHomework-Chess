@@ -1,7 +1,8 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-#define PATH_MAX 256
+#include "core/game/game.h"
+
 #define WINDOW_W 1920
 #define WINDOW_H 1080
 #define FONTS_DIR "assets/fonts/"
