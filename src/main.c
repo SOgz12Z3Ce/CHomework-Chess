@@ -11,24 +11,15 @@
 #include "gui/button.h"
 #include "core/game/game.h"
 
-// #define START_W 500
-// #define START_H 100
-// #define START_X (WINDOW_W / 2 - START_W / 2)
-// #define START_Y (WINDOW_H / 2 - START_H / 2)
-// #define EXIT_W 50
-// #define EXIT_H 50
-// #define EXIT_X (WINDOW_W - EXIT_W)
-// #define EXIT_Y 0
-
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 static TTF_Font *font = NULL;
 static char fonts_full_dir[PATH_MAX] = "";
 static char images_full_dir[PATH_MAX] = "";
+static button_t *buttons[BUTTONS_MAX];
+static size_t buttons_index = 0;
 
-// static void start_on_press(button_t *this, appstate_t *as);
-// static void start_on_release(button_t *this, appstate_t *as);
-// static void start_on_click(button_t *this, appstate_t *as);
+static void on_change_scene();
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
@@ -56,30 +47,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 	/* appstate */
 	appstate_t *as = (appstate_t *)malloc(sizeof(appstate_t));
 	as->running = true;
+	as->scene = SCENE_MAINMENU;
+	as->chaging_scene = true;
 	*appstate = as;
-
-	/* buttons */
-	// button_t *start_b = create_button(
-	// 	(SDL_FRect){
-	// 		.x = START_X,
-	// 		.y = START_Y,
-	// 		.w = START_W,
-	// 		.h = START_H
-	// 	},
-	// 	(SDL_Color){
-	// 		.r = 0x00,
-	// 		.g = 0x00,
-	// 		.b = 0xFF,
-	// 		.a = 0x80
-	// 	},
-	// 	texture_from_str(renderer, font, u8"开始游戏", &color_white),
-	// 	false,
-	// 	nop,
-	// 	start_on_press,
-	// 	start_on_release,
-	// 	start_on_click,
-	// 	nop
-	// );
 
 	return SDL_APP_CONTINUE;
 }
@@ -104,10 +74,30 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
 	appstate_t *as = (appstate_t *)appstate;
+	
+	/* clear */
+	SDL_SetRenderDrawColor(renderer, 0x35, 0x35, 0x35, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(renderer);
 
-	if (as->game.state == GAME_UPDATING)
+	if (as->chaging_scene) {
+		switch (as->scene)
+		{
+		case SCENE_MAINMENU:
+			/* TODO: add mainmenu scenes */
+			break;
+		case SCENE_GAME:
+			/* TODO: add game scenes */
+			break;
+		}
+	}
+
+	if (as->scene == SCENE_GAME && as->game.state == GAME_UPDATING)
 		game_update(&as->game, as->game.command);
 
+	for (size_t i = 0; i < buttons_index; i++)
+		button_update(renderer, buttons[i], as);
+
+	SDL_RenderPresent(renderer);
 	return SDL_APP_CONTINUE;
 }
 
@@ -116,27 +106,10 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
 
 }
 
-// static void start_on_press(button_t *this, appstate_t *as)
-// {
-// 	this->color = (SDL_Color) {
-// 		.r = 0x00,
-// 		.g = 0xFF,
-// 		.b = 0x00,
-// 		.a = SDL_ALPHA_OPAQUE
-// 	};
-// }
+static void on_change_scene()
+{
+	for (size_t i = 0; i < buttons_index; i++)
+		button_free(buttons[i]);
 
-// static void start_on_release(button_t *this, appstate_t *as)
-// {
-// 	this->color = (SDL_Color) {
-// 		.r = 0x00,
-// 		.g = 0x00,
-// 		.b = 0xFF,
-// 		.a = SDL_ALPHA_OPAQUE
-// 	};
-// }
-
-// static void start_on_click(button_t *this, appstate_t *as)
-// {
-// 	/* TODO: add game scene */
-// }
+	buttons_index = 0;
+}
