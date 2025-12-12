@@ -18,6 +18,7 @@
 #include "core/pieces/queen.h"
 #include "core/pieces/king.h"
 #include "gui/scenes/scene_mainmenu.h"
+#include "gui/scenes/scene_game.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -55,7 +56,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 	/* appstate */
 	appstate_t *as = (appstate_t *)malloc(sizeof(appstate_t));
 	as->running = true;
-	as->scene = SCENE_MAINMENU;
+	as->scene = SCENE_GAME;
 	as->chaging_scene = true;
 	board_ptr_t board = stdboard_create();
 	board.i->put(board, pawn_create(SIDE_BLACK), pos_create(1, 0));
@@ -138,7 +139,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 			get_mainmenu_buttons(buttons, &buttons_index, renderer, font);
 			break;
 		case SCENE_GAME:
-			/* TODO: add game scenes */
+			get_game_buttons(buttons, &buttons_index, renderer, font, as);
 			break;
 		}
 		as->chaging_scene = false;

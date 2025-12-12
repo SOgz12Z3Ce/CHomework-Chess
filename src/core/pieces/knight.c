@@ -20,7 +20,7 @@
 
 static const char name[] = "knight";
 static const char white_image_path[] = "White_Knight.svg";
-static const char black_image_path[] = "Black_Kngiht.svg";
+static const char black_image_path[] = "Black_Knight.svg";
 
 static piece_ptr_t copy(piece_ptr_t p);
 static bool is(piece_ptr_t p, const char *const type);
