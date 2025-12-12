@@ -80,6 +80,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 	SDL_RenderClear(renderer);
 
 	if (as->chaging_scene) {
+		on_change_scene();
 		switch (as->scene)
 		{
 		case SCENE_MAINMENU:
@@ -89,6 +90,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 			/* TODO: add game scenes */
 			break;
 		}
+		as->chaging_scene = false;
 	}
 
 	if (as->scene == SCENE_GAME && as->game.state == GAME_UPDATING)
