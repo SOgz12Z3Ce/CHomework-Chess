@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="42.929016mm"
+   height="55.879208mm"
+   viewBox="0 0 42.929016 55.879208"
+   version="1.1"
+   id="svg1"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     transform="translate(0.84288755,-0.10439837)">
+    <path
+       fill="#ffffff"
+       stroke="#20201e"
+       stroke-width="0.924639"
+       d="m 40.315444,55.521281 c 0.723477,0 1.308365,-0.58528 1.308365,-1.30878 v -3.07515 c 0,-0.72348 -0.584888,-1.30837 -1.308365,-1.30837 H 0.92779693 c -0.72305295,0 -1.30836495,0.58489 -1.30836495,1.30837 v 3.07515 c 0,0.72347 0.585259,1.30878 1.30836495,1.30878 z"
+       id="path29" />
+    <rect
+       x="1.7352238"
+       y="44.983063"
+       fill="#ffffff"
+       stroke="#20201e"
+       stroke-width="0.924639"
+       width="37.773609"
+       height="4.8469281"
+       id="rect29" />
+    <polygon
+       fill="#ffffff"
+       stroke="#20201e"
+       stroke-width="3.4947"
+       stroke-linejoin="bevel"
+       points="-511.6526,63.9094 -526.3322,80.3635 -383.5658,80.3635 -398.2454,63.9094 "
+       id="polygon29"
+       transform="matrix(0.26458333,0,0,0.26458333,140.99394,23.72022)" />
+    <polygon
+       fill="#ffffff"
+       stroke="#20201e"
+       stroke-width="3.4947"
+       stroke-linejoin="round"
+       points="-511.6526,-33.0436 -530.8688,-51.3664 -379.092,-51.3664 -398.2454,-33.0436 "
+       id="polygon30"
+       transform="matrix(0.26458333,0,0,0.26458333,140.99394,23.72022)" />
+    <rect
+       x="5.6192284"
+       y="14.977434"
+       fill="#ffffff"
+       stroke="#20201e"
+       stroke-width="0.924639"
+       width="29.965677"
+       height="25.654661"
+       id="rect30" />
+    <path
+       fill="#ffffff"
+       stroke="#20201e"
+       stroke-width="0.924639"
+       stroke-linecap="square"
+       d="m 39.458062,0.56687686 h -6.98926 V 5.0613539 l -3.92221,1.299051 -3.616536,-1.299051 V 0.56687686 H 16.314693 V 5.0613539 L 12.698157,6.3604049 8.7755496,5.0613539 V 0.56687686 H 1.7862639 c -0.690959,0 -1.25102892,0.58528504 -1.25102892,1.30754404 V 10.143603 H 40.710335 V 1.8744209 C 40.709541,1.1518969 40.149286,0.56671786 39.458406,0.56671786 Z"
+       id="path30" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path29"
+       id="use102" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect29"
+       id="use103" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#polygon29"
+       id="use104" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#polygon30"
+       id="use105" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#rect30"
+       id="use106" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path30"
+       id="use107" />
+  </g>
+</svg>
