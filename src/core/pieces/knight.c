@@ -18,15 +18,23 @@
 #include "core/mallocer.h"
 #include "core/pieces/distance.h"
 
+static const char name[] = "knight";
+static const char white_image_path[] = "White_Knight.svg";
+static const char black_image_path[] = "Black_Kngiht.svg";
+
 static piece_ptr_t copy(piece_ptr_t p);
 static bool is(piece_ptr_t p, const char *const type);
 static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos);
+static void get_name(piece_ptr_t p, char *output);
 static side_t get_side(piece_ptr_t p);
+static void get_image_path(piece_ptr_t p, char *output);
 
 /** @brief the knight piece */
 struct knight_t {
 	piece_interface_t i;
 	side_t side; /**< @brief `SIDE_WHITE` or `SIDE_BLACK` */
+	const char *name;
+	const char *image_path;
 };
 
 static const piece_interface_t vtable = (piece_interface_t) {
@@ -39,7 +47,9 @@ static const piece_interface_t vtable = (piece_interface_t) {
 	.can_attack = piece_can_attack,
 	.can_move = piece_can_move,
 	.all = piece_all,
+	.get_name = get_name,
 	.get_side = get_side,
+	.get_image_path = get_image_path,
 	.on_move = piece_on_move,
 };
 
@@ -52,8 +62,13 @@ piece_ptr_t knight_create(side_t side)
 	}
 	*ret = (knight_t) {
 		.i = vtable,
-		.side = side
+		.side = side,
+		.name = name
 	};
+	if (side == SIDE_WHITE)
+		ret->image_path = white_image_path;
+	else
+		ret->image_path = black_image_path;
 	return (piece_ptr_t) {
 		.knight = ret
 	};
@@ -71,6 +86,13 @@ static bool is(piece_ptr_t p, const char *const type)
 	return strcmp(type, "knight") == 0;
 }
 
+static void get_name(piece_ptr_t p, char *output)
+{
+	knight_t *this = p.knight;
+
+	strcpy(output, this->name);
+}
+
 static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
 {
 	/* knight_t *this = p.knight; */
@@ -82,6 +104,13 @@ static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
 
 	return (dist_row == 2 && dist_col == 1)
 	       || (dist_row == 1 && dist_col == 2);
+}
+
+static void get_image_path(piece_ptr_t p, char *output)
+{
+	knight_t *this = p.knight;
+
+	strcpy(output, this->image_path);
 }
 
 static side_t get_side(piece_ptr_t p)

@@ -108,6 +108,13 @@ struct piece_interface_t {
 	              all_callback_t callback);
 
 	/**
+	 * @brief get the name of piece
+	 * @param p [in] piece
+	 * @param dest [out] output
+	 */
+	void (*get_name)(piece_ptr_t p, char *output);
+
+	/**
 	 * @brief get `piece_ptr_t` side
 	 * @param p [in] `piece_ptr_t`
 	 * @return side of `piece_ptr_t`:
@@ -115,6 +122,13 @@ struct piece_interface_t {
 	 *         - `SIDE_BLACK`: black side
 	 */
 	side_t (*get_side)(piece_ptr_t p);
+
+	/**
+	 * @brief get the relative path of piece image
+	 * @param p [in] piece
+	 * @param dest [out] output
+	 */
+	void (*get_image_path)(piece_ptr_t p, char *output);
 
 	/**
 	 * @brief take actions when `piece_ptr_t` is moved

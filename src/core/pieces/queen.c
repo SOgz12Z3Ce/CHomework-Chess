@@ -18,16 +18,24 @@
 #include "core/mallocer.h"
 #include "core/pieces/distance.h"
 
+static const char name[] = "queen";
+static const char white_image_path[] = "White_Queen.svg";
+static const char black_image_path[] = "Black_Queen.svg";
+
 static piece_ptr_t copy(piece_ptr_t p);
 static bool is(piece_ptr_t p, const char *const type);
 static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos);
+static void get_name(piece_ptr_t p, char *output);
 static side_t get_side(piece_ptr_t p);
+static void get_image_path(piece_ptr_t p, char *output);
 
 /** @brief the queen piece */
 struct queen_t
 {
 	piece_interface_t i;
 	side_t side; /**< @brief `SIDE_WHITE` or `SIDE_BLACK` */
+	const char *name;
+	const char *image_path;
 };
 
 static const piece_interface_t vtable = (piece_interface_t){
@@ -40,7 +48,9 @@ static const piece_interface_t vtable = (piece_interface_t){
 	.can_attack = piece_can_attack,
 	.can_move = piece_can_move,
 	.all = piece_all,
+	.get_name = get_name,
 	.get_side = get_side,
+	.get_image_path = get_image_path,
 	.on_move = piece_on_move,
 };
 
@@ -54,7 +64,13 @@ piece_ptr_t queen_create(side_t side)
 	}
 	*ret = (queen_t){
 		.i = vtable,
-		.side = side};
+		.side = side,
+		.name = name
+	};
+	if (side == SIDE_WHITE)
+		ret->image_path = white_image_path;
+	else
+		ret->image_path = black_image_path;
 	return (piece_ptr_t){
 		.queen = ret};
 }
@@ -101,9 +117,23 @@ static bool can_control(piece_ptr_t p, board_ptr_t b, pos_t pos)
 	return true;
 }
 
+static void get_name(piece_ptr_t p, char *output)
+{
+	queen_t *this = p.queen;
+
+	strcpy(output, this->name);
+}
+
 static side_t get_side(piece_ptr_t p)
 {
 	queen_t *this = p.queen;
 
 	return this->side;
+}
+
+static void get_image_path(piece_ptr_t p, char *output)
+{
+	queen_t *this = p.queen;
+
+	strcpy(output, this->image_path);
 }
