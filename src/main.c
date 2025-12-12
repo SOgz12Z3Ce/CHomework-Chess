@@ -17,6 +17,7 @@
 #include "core/pieces/bishop.h"
 #include "core/pieces/queen.h"
 #include "core/pieces/king.h"
+#include "gui/scenes/scene_mainmenu.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -134,7 +135,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 		switch (as->scene)
 		{
 		case SCENE_MAINMENU:
-			/* TODO: add mainmenu scenes */
+			get_mainmenu_buttons(buttons, &buttons_index, renderer, font);
 			break;
 		case SCENE_GAME:
 			/* TODO: add game scenes */
