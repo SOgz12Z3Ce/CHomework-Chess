@@ -56,7 +56,8 @@ add_custom_command(TARGET chess POST_BUILD
 	COMMAND "${CMAKE_COMMAND}" -E copy_directory_if_different "${ASSETS_DIR}" "$<TARGET_FILE_DIR:chess>/assets"
 
 	# licenses
-	COMMAND "${CMAKE_COMMAND}" -E make_directory "$<TARGET_FILE_DIR:chess>/licenses"
+	COMMAND "${CMAKE_COMMAND}" -E copy_directory_if_different "${PROJECT_SOURCE_DIR}/licenses" "$<TARGET_FILE_DIR:chess>/licenses"
+	COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${SDL3_DIR}/share/licenses/SDL3/LICENSE.txt" "$<TARGET_FILE_DIR:chess>/licenses/SDL/LICENSE.txt"
 	COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${SDL3_DIR}/share/licenses/SDL3/LICENSE.txt" "$<TARGET_FILE_DIR:chess>/licenses/SDL/LICENSE.txt"
 	COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${SDL3_TTF_DIR}/share/licenses/SDL3_ttf/LICENSE.txt" "$<TARGET_FILE_DIR:chess>/licenses/SDL_ttf/LICENSE.txt"
 	COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${SDL3_IMAGE_DIR}/share/licenses/SDL3_image/LICENSE.txt" "$<TARGET_FILE_DIR:chess>/licenses/SDL_image/LICENSE.txt"
