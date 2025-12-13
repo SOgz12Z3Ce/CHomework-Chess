@@ -98,13 +98,6 @@ void get_game_buttons(button_t **dest, size_t *buttons_index, SDL_Renderer *rend
 			}
 	}
 	
-//  const char *right_button_images[5] = {
-//		"Promotation_Rook.svg",
-//		"Promotation_Queen.svg",
-//		"Promotation_Bishop.svg",
-//		"Promotation_Knight.svg",
-//		"save.svg"
-//	};
 	const char *right_button_texts[5] = {
     "升变_车",
     "升变_后",
@@ -118,12 +111,6 @@ SDL_Color text_color = {0, 0, 0, 255};
 	for(int i = 0; i < 5; i++) {
 		float bx = RIGHT_PANEL_X + (RIGHT_PANEL_W - GAME_BUTTON_W) / 2;
 		float by = GAME_BUTTON_SPACING + i * (GAME_BUTTON_H + GAME_BUTTON_SPACING);
-		
-        //char btn_path[2600];
-		//strcpy(btn_path, images_full_dir);
-		//strcat(btn_path, right_button_texts[i]);
-
-        //SDL_Texture *btn_tex = texture_from_svg(renderer, btn_path, GAME_BUTTON_W, GAME_BUTTON_H);
         
 		SDL_Texture *btn_tex = texture_from_str(renderer, font, right_button_texts[i], &text_color);
 
