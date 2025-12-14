@@ -135,6 +135,18 @@ chess_clock_t *create_clock() {
     pthread_mutex_init(&clock->mutex, NULL);
     pthread_cond_init(&clock->cond, NULL);
 
+    if (clock == NULL || clock->running == 1) {
+        return NULL;
+    }
+
+    pthread_mutex_lock(&clock->mutex);
+    clock->running = 1;
+    pthread_mutex_unlock(&clock->mutex);
+
+    // 创建计时线程
+    pthread_create(&clock->tid_white, NULL, timer_white, clock);
+    pthread_create(&clock->tid_black, NULL, timer_black, clock);
+
     return clock;
 }
 
