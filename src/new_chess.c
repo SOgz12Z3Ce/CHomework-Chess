@@ -116,6 +116,5 @@ piece_ptr_t **load()
 	state[1][7] = pawn_create(SIDE_BLACK);
 fclose(fp);
 	printf("load success in save.txt\n");
-	// ...
 	return state;
 }
