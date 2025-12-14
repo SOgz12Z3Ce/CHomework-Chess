@@ -236,15 +236,16 @@ static side_t get_checking(board_ptr_t b)
 	}
 
 	/* check if checked */
-	bool is_white_checked;
-	bool is_black_checked;
+	bool is_white_checked = false;
+	bool is_black_checked = false;
 	for (size_t i = 0; i < STDBOARD_ROW_SIZE; i++) {
 		for (size_t j = 0; j < STDBOARD_COL_SIZE; j++) {
 			piece_ptr_t tmp = this->state[i][j];
 			if (!tmp.ptr)
 				continue;
-			if (tmp.i->can_attack(tmp, b, white_pos))
+			if (tmp.i->can_attack(tmp, b, white_pos)) {
 				is_white_checked = true;
+			}
 			if (tmp.i->can_attack(tmp, b, black_pos))
 				is_black_checked = true;
 		}
