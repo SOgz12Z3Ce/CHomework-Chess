@@ -64,7 +64,6 @@ static void* timer_white(void* arg) {
         // 退出条件：停止运行 或 时间耗尽
         if (!clock->running || clock->white_time <= 0) {
             if (clock->white_time <= 0) {
-                printf("\n=== 白方时间耗尽! ===\n");
                 clock->running = 0;
                 pthread_cond_broadcast(&clock->cond);
             }
@@ -78,8 +77,6 @@ static void* timer_white(void* arg) {
             pthread_mutex_lock(&clock->mutex);
             if (clock->is_white_turn == 1 && clock->running) {
                 clock->white_time--;
-                printf("白方剩余: %02zu:%02zu\r", clock->white_time / 60, clock->white_time % 60);
-                fflush(stdout);  // 强制刷新输出
             }
             pthread_mutex_unlock(&clock->mutex);
         }
@@ -100,7 +97,6 @@ static void* timer_black(void* arg) {
         }
         if (!clock->running || clock->black_time <= 0) {
             if (clock->black_time <= 0) {
-                printf("\n=== 黑方时间耗尽! ===\n");
                 clock->running = 0;
                 pthread_cond_broadcast(&clock->cond);
             }
@@ -113,7 +109,6 @@ static void* timer_black(void* arg) {
             pthread_mutex_lock(&clock->mutex);
             if (clock->is_white_turn == 0 && clock->running) {
                 clock->black_time--;
-                printf("黑方剩余: %02zu:%02zu\r", clock->black_time / 60, clock->black_time % 60);
                 fflush(stdout);
             }
             pthread_mutex_unlock(&clock->mutex);
@@ -146,7 +141,6 @@ chess_clock_t *create_clock() {
 // 2. 设置双方时间
 void set_clock(chess_clock_t *clock, size_t white_t, size_t black_t) {
     if (clock == NULL) {
-        fprintf(stderr, "set_clock: clock is NULL\n");
         return;
     }
 
@@ -159,7 +153,6 @@ void set_clock(chess_clock_t *clock, size_t white_t, size_t black_t) {
 // 3. 获取白方时间
 size_t get_white_time(chess_clock_t *clock) {
     if (clock == NULL) {
-        fprintf(stderr, "get_white_time: clock is NULL\n");
         return 0;
     }
 
@@ -173,7 +166,6 @@ size_t get_white_time(chess_clock_t *clock) {
 // 4. 获取黑方时间
 size_t get_black_time(chess_clock_t *clock) {
     if (clock == NULL) {
-        fprintf(stderr, "get_black_time: clock is NULL\n");
         return 0;
     }
 
@@ -187,24 +179,17 @@ size_t get_black_time(chess_clock_t *clock) {
 // 5. 切换计时方
 void switch_clock(chess_clock_t *clock) {
     if (clock == NULL) {
-        fprintf(stderr, "switch_clock: clock is NULL\n");
         return;
     }
 
     pthread_mutex_lock(&clock->mutex);
     if (clock->running == 0) {
-        printf("switch_clock: 棋钟未启动，无法切换！\n");
         pthread_mutex_unlock(&clock->mutex);
         return;
     }
 
     // 切换回合
     clock->is_white_turn = !clock->is_white_turn;
-    if (clock->is_white_turn == 1) {
-        printf("\n黑方停钟, 白方开始计时!\n");
-    } else {
-        printf("\n白方停钟, 黑方开始计时!\n");
-    }
     pthread_cond_broadcast(&clock->cond);  // 唤醒等待的线程
     pthread_mutex_unlock(&clock->mutex);
 }
@@ -222,7 +207,6 @@ void start_clock(chess_clock_t *clock) {
     // 创建计时线程
     pthread_create(&clock->tid_white, NULL, timer_white, clock);
     pthread_create(&clock->tid_black, NULL, timer_black, clock);
-    printf("=== 棋钟启动 ===\n初始回合: 白方\n");
 }
 
 // 6. 销毁时钟实例
@@ -247,5 +231,4 @@ void clock_free(chess_clock_t *clock) {
 
     // 释放内存
     free(clock);
-    printf("\n=== 棋钟已销毁 ===\n");
 }
