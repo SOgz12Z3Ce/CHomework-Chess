@@ -43,7 +43,7 @@ int timer_should_trigger(Timer* timer) {
     return 0;
 }
 
-// 阻塞指定秒数（无Sleep，用定时器实现）
+// 阻塞指定秒数
 void precise_delay(double seconds) {
     Timer timer;
     timer_init(&timer, seconds);
@@ -76,7 +76,7 @@ int chess_clock_get_black() {
     return time;
 }
 
-// 4. 切换计时方（主动调用，无键盘依赖）
+// 4. 切换计时方
 void chess_clock_switch() {
     pthread_mutex_lock(&mutex);
     if (clock_info.running == 0) {
@@ -95,7 +95,7 @@ void chess_clock_switch() {
 }
 
 // 白方计时线程
-void* timer_white(void* arg) {
+void* timer_white() {
     Timer timer;
     timer_init(&timer, 1.0); // 1秒间隔
     while (1) {
@@ -131,7 +131,7 @@ void* timer_white(void* arg) {
 }
 
 // 黑方计时线程
-void* timer_black(void* arg) {
+void* timer_black() {
     Timer timer;
     timer_init(&timer, 1.0);
     while (1) {
@@ -163,7 +163,7 @@ void* timer_black(void* arg) {
     return NULL;
 }
 
-// 5. 创建时钟（初始化+启动线程）
+// 5. 创建时钟
 void chess_clock_create() {
     // 初始化同步对象
     pthread_mutex_init(&mutex, NULL);
@@ -180,7 +180,7 @@ void chess_clock_create() {
     printf("初始回合: 白方\n");
 }
 
-// 6. 销毁时钟（回收线程+释放资源）
+// 6. 销毁时钟
 void chess_clock_destroy() {
     // 先停止运行
     pthread_mutex_lock(&mutex);
