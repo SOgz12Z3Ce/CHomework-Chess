@@ -1,3 +1,6 @@
+#ifndef GAME_H_
+#define GAME_H_
+
 #include <stdint.h>
 #include "core/boards/board.h"
 
@@ -12,6 +15,9 @@ struct game_t {
 	game_state_t state;
 	board_ptr_t board;
 	char *command;
+	bool white_turn;
 };
 
 void game_update(game_t *game, const char command[]);
+
+#endif /* GAME_H_ */
