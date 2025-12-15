@@ -37,6 +37,7 @@ target_sources(chess PRIVATE
 	"${SRC_DIR}/gui/utils.c"
 	"${SRC_DIR}/gui/scenes/scene_mainmenu.c"
 	"${SRC_DIR}/gui/scenes/scene_game.c"
+	"${SRC_DIR}/gui/timer/timer.c"
 )
 target_link_libraries(chess PRIVATE
 	"${SDL3_DIR}/lib/libSDL3.dll.a"
