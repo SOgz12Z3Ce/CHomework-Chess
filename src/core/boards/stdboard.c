@@ -201,12 +201,14 @@ static void move(board_ptr_t b, move_t m)
 	piece_ptr_t cur_p = pickup(this, m.src);
 	piece_ptr_t dest_p = at(this, m.dest);
 
-	this->last = m;
-	cur_p.i->on_move(cur_p, b);
-
 	if (dest_p.ptr)
 		_remove(this, m.dest);
 	put(this, cur_p, m.dest);
+
+	this->last = m;
+	printf("debug1\n");
+	cur_p.i->on_move(cur_p, b);
+	printf("debug2\n");
 }
 
 static side_t get_checking(board_ptr_t b)

@@ -56,7 +56,7 @@ static const piece_interface_t vtable = (piece_interface_t) {
 	.get_name = get_name,
 	.get_side = get_side,
 	.get_image_path = get_image_path,
-	.on_move = piece_on_move,
+	.on_move = on_move,
 };
 
 piece_ptr_t pawn_create(side_t side)
