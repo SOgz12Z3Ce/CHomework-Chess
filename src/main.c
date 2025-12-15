@@ -19,6 +19,7 @@
 #include "core/pieces/king.h"
 #include "gui/scenes/scene_mainmenu.h"
 #include "gui/scenes/scene_game.h"
+#include "gui/events/events.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -114,6 +115,18 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 	{
 	case SDL_EVENT_QUIT:
 		return SDL_APP_SUCCESS;
+	case SDL_EVENT_MOUSE_BUTTON_DOWN:
+		for (size_t i = 0; i < buttons_index; i++)
+			try_press_button(as, event, buttons[i]);
+		break;
+	case SDL_EVENT_MOUSE_BUTTON_UP:
+		for (size_t i = 0; i < buttons_index; i++)
+			try_release_button(as, event, buttons[i]);
+		break;
+	case SDL_EVENT_MOUSE_MOTION:
+		for (size_t i = 0; i < buttons_index; i++)
+			try_drag_button(as, event, buttons[i]);
+		break;
 	default:
 		break;
 	}
