@@ -57,46 +57,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 	/* appstate */
 	appstate_t *as = (appstate_t *)malloc(sizeof(appstate_t));
 	as->running = true;
-	as->scene = SCENE_GAME;
+	as->scene = SCENE_MAINMENU;
 	as->chaging_scene = true;
+	as->moving_piece = pos_create(0, 0);
+	as->event = NULL;
+	as->ready_to_promote = false;
 	board_ptr_t board = stdboard_create();
-	board.i->put(board, pawn_create(SIDE_BLACK), pos_create(1, 0));
-	board.i->put(board, pawn_create(SIDE_BLACK), pos_create(1, 1));
-	board.i->put(board, pawn_create(SIDE_BLACK), pos_create(1, 2));
-	board.i->put(board, pawn_create(SIDE_BLACK), pos_create(1, 3));
-	board.i->put(board, pawn_create(SIDE_BLACK), pos_create(1, 4));
-	board.i->put(board, pawn_create(SIDE_BLACK), pos_create(1, 5));
-	board.i->put(board, pawn_create(SIDE_BLACK), pos_create(1, 6));
-	board.i->put(board, pawn_create(SIDE_BLACK), pos_create(1, 7));
-	board.i->put(board, pawn_create(SIDE_WHITE), pos_create(6, 0));
-	board.i->put(board, pawn_create(SIDE_WHITE), pos_create(6, 1));
-	board.i->put(board, pawn_create(SIDE_WHITE), pos_create(6, 2));
-	board.i->put(board, pawn_create(SIDE_WHITE), pos_create(6, 3));
-	board.i->put(board, pawn_create(SIDE_WHITE), pos_create(6, 4));
-	board.i->put(board, pawn_create(SIDE_WHITE), pos_create(6, 5));
-	board.i->put(board, pawn_create(SIDE_WHITE), pos_create(6, 6));
-	board.i->put(board, pawn_create(SIDE_WHITE), pos_create(6, 7));
-
-	board.i->put(board, rook_create(SIDE_BLACK), pos_create(0, 0));
-	board.i->put(board, rook_create(SIDE_BLACK), pos_create(0, 7));
-	board.i->put(board, rook_create(SIDE_WHITE), pos_create(7, 0));
-	board.i->put(board, rook_create(SIDE_WHITE), pos_create(7, 7));
-
-	board.i->put(board, knight_create(SIDE_BLACK), pos_create(0, 1));
-	board.i->put(board, knight_create(SIDE_BLACK), pos_create(0, 6));
-	board.i->put(board, knight_create(SIDE_WHITE), pos_create(7, 1));
-	board.i->put(board, knight_create(SIDE_WHITE), pos_create(7, 6));
-
-	board.i->put(board, bishop_create(SIDE_BLACK), pos_create(0, 2));
-	board.i->put(board, bishop_create(SIDE_BLACK), pos_create(0, 5));
-	board.i->put(board, bishop_create(SIDE_WHITE), pos_create(7, 2));
-	board.i->put(board, bishop_create(SIDE_WHITE), pos_create(7, 5));
-
-	board.i->put(board, queen_create(SIDE_BLACK), pos_create(0, 3));
-	board.i->put(board, queen_create(SIDE_WHITE), pos_create(7, 3));
-
-	board.i->put(board, king_create(SIDE_BLACK), pos_create(0, 4));
-	board.i->put(board, king_create(SIDE_WHITE), pos_create(7, 4));
 
 	as->game = (game_t){
 		.state = GAME_DEFAULT,
@@ -110,6 +76,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 {
 	appstate_t *as = (appstate_t *)appstate;
+	as->event = event;
 
 	switch (event->type)
 	{
