@@ -34,8 +34,8 @@ cd CHomework-Chess
 ```bash
 mkdir build
 cd build
-cmake ..
-cmake --build . --config Release
+cmake -G "MinGW Makefiles" .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
 ```
 
 ### 运行
@@ -46,8 +46,15 @@ cmake --build . --config Release
 
 ## 使用方法
 
-未实现，此处暂空。
+### 主界面
 
-## 示例
+- 点击“开始游戏”即可开始游戏
+- 点击“继续游戏”即可读取存档，存档位于游戏程序同一目录下的 `save.csv`
+- 点击右上角的红色“×”按钮可退出游戏。
 
-未实现，此处暂空。
+### 游戏界面
+
+- 欲移动棋子，只需用鼠标拖拽棋子到另一位置
+  - 如果走棋不合法，则棋子会被弹回
+  - 当兵移动至底线时，需要按下右侧的升变按钮选择升变的棋子。
+- 按下“保存当前进度”即可存档
